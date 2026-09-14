@@ -3,7 +3,7 @@ import { GlassTile } from './GlassTile';
 export class Board {
   readonly element: HTMLElement;
   private tiles: GlassTile[] = [];
-  private currentGridSize: 2 | 3 | 4 = 2;
+  private currentGridSize: 2 | 3 | 4 | 5 = 2;
   private onTileTapCallback: ((index: number) => void) | null = null;
   private isInteractive = false;
 
@@ -31,7 +31,7 @@ export class Board {
     });
   }
 
-  setupGrid(gridSize: 2 | 3 | 4): void {
+  setupGrid(gridSize: 2 | 3 | 4 | 5): void {
     if (this.currentGridSize === gridSize && this.tiles.length === gridSize * gridSize) {
       this.resetAllTiles();
       return;
@@ -93,7 +93,7 @@ export class Board {
     this.tiles.forEach((t) => t.resetVisuals());
   }
 
-  getGridSize(): 2 | 3 | 4 {
+  getGridSize(): 2 | 3 | 4 | 5 {
     return this.currentGridSize;
   }
 }

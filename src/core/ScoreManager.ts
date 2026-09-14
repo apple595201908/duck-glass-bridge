@@ -28,7 +28,7 @@ export class ScoreManager {
   addLevelScore(config: LevelConfig, responseDurationMs: number): { added: number; isNewRecord: boolean } {
     const baseScore = config.level * 100;
     const sequenceBonus = config.sequenceLength * 50;
-    const boardBonus = config.gridSize === 2 ? 100 : config.gridSize === 3 ? 250 : 500;
+    const boardBonus = config.gridSize === 2 ? 100 : config.gridSize === 3 ? 250 : config.gridSize === 4 ? 500 : 850;
 
     // 速度加成：非常微量，上限不超過 (baseScore + sequenceBonus) 的 8%
     const standardAllowedMs = config.sequenceLength * 1500;

@@ -72,15 +72,17 @@ export class DuckController {
   }
 
   /**
-   * 根據棋盤網格大小 (2x2 / 3x3 / 4x4) 自動適配鴨鴨體型
+   * 根據棋盤網格大小 (2x2 / 3x3 / 4x4 / 5x5) 自動適配鴨鴨體型
    */
-  setGridSize(gridSize: 2 | 3 | 4): void {
+  setGridSize(gridSize: 2 | 3 | 4 | 5): void {
     if (gridSize === 2) {
       this.gridScale = 1.05;
     } else if (gridSize === 3) {
       this.gridScale = 0.88;
-    } else {
+    } else if (gridSize === 4) {
       this.gridScale = 0.72;
+    } else {
+      this.gridScale = 0.58;
     }
     this.updateTransform(0, 1, 1, 0);
   }

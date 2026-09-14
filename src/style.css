@@ -662,6 +662,12 @@ body::after {
   gap: 8px;
 }
 
+.grid-size-5 {
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 6px;
+}
+
 /* 單塊玻璃格 */
 .glass-tile {
   position: relative;
@@ -691,6 +697,10 @@ body::after {
 
 .grid-size-4 .glass-pane {
   border-radius: 14px;
+}
+
+.grid-size-5 .glass-pane {
+  border-radius: 10px;
 }
 
 /* 玻璃頂部光澤斜角 */
@@ -742,6 +752,10 @@ body::after {
 
 .grid-size-4 .glass-step-number {
   font-size: 1.85rem;
+}
+
+.grid-size-5 .glass-step-number {
+  font-size: 1.45rem;
 }
 
 /* 著地衝擊漣漪光環 (Juicy Land Feedback) */

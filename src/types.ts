@@ -18,7 +18,7 @@ export interface PresentationTimingConfig {
 
 export interface LevelConfig {
   level: number;
-  gridSize: 2 | 3 | 4;
+  gridSize: 2 | 3 | 4 | 5;
   sequenceLength: number;
   timing: PresentationTimingConfig;
 }
