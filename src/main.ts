@@ -21,9 +21,15 @@ class App {
 
   private initScenes(): void {
     // 主選單
-    this.menuScene = new MenuScene(this.appContainer, () => {
-      this.handleStartGame();
-    });
+    this.menuScene = new MenuScene(
+      this.appContainer,
+      () => {
+        this.handleStartGame();
+      },
+      () => {
+        this.handleOpenTutorial();
+      }
+    );
 
     // 遊戲主畫面
     this.gameScene = new GameScene(this.appContainer, () => {
@@ -52,6 +58,12 @@ class App {
       this.gameScene.show();
       this.gameScene.startNewGame();
     }
+  }
+
+  private handleOpenTutorial(): void {
+    this.menuScene.hide();
+    this.gameScene.hide();
+    this.tutorialScene.show();
   }
 
   private showMenu(): void {

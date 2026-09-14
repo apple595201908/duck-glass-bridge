@@ -8,6 +8,8 @@ import { DuckController } from '../components/DuckController';
 import { SevenSegmentDisplay } from '../ui/SevenSegmentDisplay';
 import { GlassShatterEffect } from '../effects/GlassShatterEffect';
 import { LevelConfig } from '../types';
+import hazardSkullUrl from '../assets/hazard_skull_emblem.png';
+import trophyChampionUrl from '../assets/trophy_champion.png';
 
 export class GameScene {
   readonly element: HTMLElement;
@@ -70,7 +72,7 @@ export class GameScene {
       <!-- 狀態即時提示 (看題目 / 換你了 / 過關) -->
       <div class="status-banner-wrapper">
         <div class="status-prompt" id="statusPrompt">準備開始...</div>
-        <!-- 關卡重大升級橫幅 (例如 3x3 / 4x4 提示) -->
+        <!-- 關卡重大升級橫幅 (例如 3x3 / 4x4 / 5x5 提示) -->
         <div class="board-upgrade-banner" id="boardUpgradeBanner"></div>
       </div>
 
@@ -88,11 +90,15 @@ export class GameScene {
       <!-- 暫停遮罩視窗 (完全遮蔽棋盤，防止作弊偷看) -->
       <div class="modal-backdrop" id="pauseModal" style="display: none;">
         <div class="modal-card pause-card">
-          <h2 class="modal-title">遊戲暫停</h2>
-          <p class="modal-desc">深淵玻璃橋已暫時凍結</p>
+          <div class="pause-holo-icon">⏸</div>
+          <h2 class="modal-title">MISSION PAUSED</h2>
+          <p class="modal-desc">深淵玻璃橋序列已暫時凍結</p>
           <div class="modal-actions">
-            <button type="button" class="btn-primary" id="resumeBtn">繼續挑戰</button>
-            <button type="button" class="btn-secondary" id="pauseMenuBtn">返回主選單</button>
+            <button type="button" class="btn-primary" id="resumeBtn">
+              <span class="btn-shine"></span>
+              繼續挑戰 RESUME
+            </button>
+            <button type="button" class="btn-secondary" id="pauseMenuBtn">返回主選單 MENU</button>
           </div>
         </div>
       </div>
@@ -101,19 +107,32 @@ export class GameScene {
       <div class="modal-backdrop" id="gameOverModal" style="display: none;">
         <div class="modal-card game-over-card">
           <div class="game-over-header">
-            <div class="skull-icon">⚠️</div>
-            <h2 class="game-over-title">GAME OVER</h2>
-            <p class="game-over-subtitle">踩中脆弱玻璃，摔落深淵！</p>
+            <div class="hazard-emblem-wrapper">
+              <div class="hazard-emblem-glow"></div>
+              <img src="${hazardSkullUrl}" alt="Critical Hazard" class="hazard-skull-emblem" />
+            </div>
+            <h2 class="game-over-title">SYSTEM HAZARD</h2>
+            <p class="game-over-subtitle">踩中脆弱玻璃，摔落虛空深淵！</p>
+          </div>
+
+          <!-- 破紀錄專屬榮譽徽章 -->
+          <div class="new-record-badge" id="newRecordBadge" style="display: none;">
+            <div class="trophy-sparkle-halo"></div>
+            <img src="${trophyChampionUrl}" alt="Champion Trophy" class="record-trophy-img" />
+            <div class="record-badge-text">
+              <span class="record-badge-title">NEW RECORD ACHIEVED!</span>
+              <span class="record-badge-sub">榮獲深淵探索者勳章</span>
+            </div>
           </div>
 
           <div class="final-score-panel">
             <div class="final-score-row">
-              <span class="label">本次關卡</span>
+              <span class="label">本次到達關卡</span>
               <span class="val highlight" id="goLevel">1</span>
             </div>
             <div class="final-score-row">
-              <span class="label">本次得分</span>
-              <span class="val highlight" id="goScore">0</span>
+              <span class="label">本次結算得分</span>
+              <span class="val highlight score-glow" id="goScore">0</span>
             </div>
             <div class="final-score-divider"></div>
             <div class="final-score-row">
@@ -126,17 +145,14 @@ export class GameScene {
             </div>
           </div>
 
-          <div class="new-record-badge" id="newRecordBadge" style="display: none;">
-            🏆 破紀錄啦！
-          </div>
-
           <div class="modal-actions">
             <button type="button" class="btn-primary restart-btn" id="restartBtn">
-              再玩一次
+              <span class="btn-shine"></span>
+              再玩一次 RETRY
             </button>
             <div class="secondary-btn-row">
-              <button type="button" class="btn-secondary" id="shareBtn">分享成績</button>
-              <button type="button" class="btn-secondary" id="goMenuBtn">返回首頁</button>
+              <button type="button" class="btn-secondary" id="shareBtn">📤 分享戰績</button>
+              <button type="button" class="btn-secondary" id="goMenuBtn">🏠 返回首頁</button>
             </div>
           </div>
         </div>
@@ -455,27 +471,59 @@ export class GameScene {
   }
 
   /**
-   * 顯示 Game Over 結算畫面
+   * 顯示 Game Over 結算畫面 (帶有商業街機級跑分與破紀錄榮譽)
    */
   private showGameOverModal(): void {
     const scoreState = this.scoreManager.getState();
 
     const goLevelEl = this.element.querySelector('#goLevel');
-    const goScoreEl = this.element.querySelector('#goScore');
+    const goScoreEl = this.element.querySelector('#goScore') as HTMLElement;
     const goBestLevelEl = this.element.querySelector('#goBestLevel');
     const goBestScoreEl = this.element.querySelector('#goBestScore');
     const newRecordBadge = this.element.querySelector('#newRecordBadge') as HTMLElement;
 
     if (goLevelEl) goLevelEl.textContent = scoreState.currentLevel.toString();
-    if (goScoreEl) goScoreEl.textContent = scoreState.currentScore.toLocaleString();
     if (goBestLevelEl) goBestLevelEl.textContent = scoreState.bestLevel.toString();
     if (goBestScoreEl) goBestScoreEl.textContent = scoreState.bestScore.toLocaleString();
 
     if (newRecordBadge) {
-      newRecordBadge.style.display = scoreState.isNewRecord ? 'block' : 'none';
+      newRecordBadge.style.display = scoreState.isNewRecord ? 'flex' : 'none';
+      if (scoreState.isNewRecord) {
+        AudioManager.playLevelClear();
+      }
+    }
+
+    if (goScoreEl) {
+      this.animateNumberCountUp(goScoreEl, scoreState.currentScore, 750);
     }
 
     this.gameOverModalEl.style.display = 'flex';
+  }
+
+  /**
+   * 數字滾動跑分動畫 (Arcade Juice Count-Up)
+   */
+  private animateNumberCountUp(element: HTMLElement, targetVal: number, durationMs = 750): void {
+    if (targetVal <= 0) {
+      element.textContent = '0';
+      return;
+    }
+    const startTime = performance.now();
+    const startVal = 0;
+    const step = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / durationMs);
+      // easeOutExpo 曲線：開頭極快奔馳、結尾柔順定格
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const current = Math.round(startVal + (targetVal - startVal) * ease);
+      element.textContent = current.toLocaleString();
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        element.textContent = targetVal.toLocaleString();
+      }
+    };
+    requestAnimationFrame(step);
   }
 
   /**

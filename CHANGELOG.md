@@ -4,6 +4,26 @@
 
 ---
 
+## [1.4.0] - 2026-09-15
+
+### 🚀 Steam 旗艦商業級視覺翻新與智慧型手機全螢幕最佳化 (Steam-Grade Commercial Visual Overhaul & Mobile Ergonomics)
+- **智慧型手機比例全螢幕人體工學優化 (100dvh & Zero Overflow)**：
+  - 全面採用 `100dvh` 動態可視高度搭配 `env(safe-area-inset-top)` / `env(safe-area-inset-bottom)` 瀏海與動態島安全邊界防護。
+  - 棋盤尺寸動態公式升級為 `min(90vw, calc(100dvh - 240px), 380px)`，在 iPhone SE (16:9)、現代 iPhone (19.5:9) 與長屏 Android (20:9) 上皆達成 100% 絕不溢出、無須上下滑動的沉浸體驗。
+  - 核心互動按鈕精確錨定於下半部 35% 最佳單手「拇指熱區 (Thumb Zone)」，單手持機輕鬆操作。
+- **全新商業級 3D 生成素材導入 (AI Generated AAA Assets)**：
+  - **3D 旗艦版遊戲大標誌 (`game_logo_badge.png`)**：高光金屬鉻金浮雕標題搭配萌系飛行員鴨，自帶呼吸背光光暈與浮動懸停微動效。
+  - **3D 冠軍金鴨獎盃 (`trophy_champion.png`)**：象徵最高成就的鑲鑽桂冠金鴨獎盃，搭配破紀錄專屬星芒光環與專屬慶祝音效。
+  - **賽博警告骷髏徽章 (`hazard_skull_emblem.png`)**：高科技全息碎裂賽博骷髏警告圖標，賦予 Game Over 畫面商業級震撼張力。
+- **Steam 商業旗艦級 UI/UX 視覺語言 (Neo-Cyber Abyss)**：
+  - 整合 Google Fonts `Outfit` (現代無襯線大氣字體) 與 `Chakra Petch` (未來科技數位顯示)。
+  - 頂部加入 Steam 官方風格發光狀態膠囊 (`STEAM EDITION v1.4`)。
+  - 全新設計黑匣子數據艙板 (Dark Obsidian Glass) 與反重力雙層同心旋轉能量環展示台。
+  - 結算畫面加入街機級數字滾動跑分動畫 (`animateNumberCountUp`)，體驗滿分的成就感！
+  - 新增主選單隨時可開啟的「玩法導引 (TUTORIAL)」按鈕，玩家任何時刻都能複習玩法。
+
+---
+
 ## [1.3.0] - 2026-09-15
 
 ### 🧩 雙重升級耦合難度曲線與全新 5×5（二十五宮格）擴展 (Grid Dimension & Path Length Coupling)
