@@ -1,25 +1,24 @@
 /* =========================================================
-   鴨鴨踩玻璃橋 (Duck Stepping Glass Bridge) - 核心樣式表
-   深色深淵空間 × 晶瑩強化玻璃 × 復古紅光七段顯示器 × Q萌小黃鴨
+   《鴨鴨踩玻璃橋》- 高精緻深淵科幻與 Q 萌小黃鴨視覺系統
+   深邃深淵空間 × 晶瑩強化玻璃 × 工業儀表紅光 LED × 超萌原創小黃鴨
    ========================================================= */
 
 :root {
-  --bg-deep-abyss: #070a0e;
-  --bg-abyss-gradient: radial-gradient(circle at 50% 35%, #101622 0%, #080c13 55%, #030508 100%);
-  --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-surface: rgba(25, 38, 54, 0.45);
-  --glass-highlight: rgba(255, 255, 255, 0.4);
-  --glass-shadow: 0 10px 25px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  --bg-deep-abyss: #06090e;
+  --glass-border: rgba(255, 255, 255, 0.24);
+  --glass-border-lit: rgba(0, 240, 255, 0.95);
+  --glass-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(16, 26, 42, 0.6) 100%);
+  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.75), inset 0 1.5px 2px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.6);
   --accent-cyan: #00f0ff;
-  --accent-cyan-glow: 0 0 20px rgba(0, 240, 255, 0.75), 0 0 45px rgba(0, 240, 255, 0.4);
+  --accent-cyan-glow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(0, 240, 255, 0.45);
   --accent-gold: #ffc83b;
-  --accent-gold-glow: 0 0 20px rgba(255, 200, 59, 0.75);
-  --led-red-on: #ff2a3b;
-  --led-red-glow: 0 0 8px rgba(255, 42, 59, 0.8), 0 0 16px rgba(255, 42, 59, 0.35);
-  --led-red-off: rgba(60, 8, 14, 0.55);
-  --text-main: #f0f4f8;
-  --text-dim: #7e8d9d;
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans TC", sans-serif;
+  --accent-gold-glow: 0 0 24px rgba(255, 200, 59, 0.85);
+  --led-red-on: #ff253a;
+  --led-red-glow: 0 0 8px rgba(255, 37, 58, 0.9), 0 0 18px rgba(255, 37, 58, 0.4);
+  --led-red-off: rgba(55, 6, 12, 0.6);
+  --text-main: #f2f7fc;
+  --text-dim: #8494a5;
+  --font-family: 'Chakra Petch', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
 }
 
 /* 全域重設與手機防護 */
@@ -36,13 +35,50 @@ html, body {
   height: 100dvh;
   overflow: hidden;
   background-color: var(--bg-deep-abyss);
-  background-image: var(--bg-abyss-gradient);
+  background-image: url('./assets/abyss_bg.webp');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
   font-family: var(--font-family);
   color: var(--text-main);
   touch-action: none;
   overscroll-behavior: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* 深淵微光星塵粒子浮動層 (增添高科技深邃感) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(0, 240, 255, 0.75), transparent),
+    radial-gradient(2px 2px at 75% 15%, rgba(0, 240, 255, 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 40% 70%, rgba(255, 200, 59, 0.7), transparent),
+    radial-gradient(2px 2px at 85% 60%, rgba(0, 240, 255, 0.5), transparent),
+    radial-gradient(1.2px 1.2px at 12% 85%, rgba(0, 240, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 60% 88%, rgba(255, 200, 59, 0.5), transparent);
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 1;
+  animation: abyss-particles-drift 10s ease-in-out infinite alternate;
+}
+
+@keyframes abyss-particles-drift {
+  0% { transform: translateY(0px) scale(1); opacity: 0.45; }
+  50% { transform: translateY(-16px) scale(1.06); opacity: 0.9; }
+  100% { transform: translateY(-32px) scale(1.02); opacity: 0.55; }
+}
+
+/* 深淵大氣黑色漸層遮罩 (增強 UI 與棋盤對比) */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(6, 10, 16, 0.65) 0%, rgba(3, 5, 8, 0.92) 100%);
+  pointer-events: none;
+  z-index: 2;
 }
 
 #app {
@@ -54,22 +90,11 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 5;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);
-}
-
-/* 深淵微弱冷霧背景層 */
-.abyss-fog-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 50% 60%, rgba(20, 35, 55, 0.22) 0%, rgba(0, 0, 0, 0) 70%);
-  z-index: 1;
 }
 
 /* 場景通用容器 */
@@ -84,7 +109,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   z-index: 5;
-  padding: 16px 20px;
+  padding: 14px 18px;
 }
 
 /* =========================================================
@@ -108,109 +133,133 @@ html, body {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
 .icon-button {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(22, 33, 48, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 50%;
   width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: var(--text-main);
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .icon-button:active {
   transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--accent-cyan);
 }
 
 .menu-hero-section {
   text-align: center;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .game-badge {
   display: inline-block;
   font-size: 0.72rem;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.1);
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  padding: 4px 12px;
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  padding: 4px 14px;
   border-radius: 20px;
   margin-bottom: 8px;
-  font-weight: 700;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
 }
 
 .game-title {
-  font-size: 2.35rem;
+  font-size: 2.45rem;
   font-weight: 900;
-  letter-spacing: 2px;
-  background: linear-gradient(180deg, #ffffff 20%, #c4d7e8 100%);
+  letter-spacing: 3px;
+  background: linear-gradient(180deg, #ffffff 15%, #b5d5f2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 240, 255, 0.3);
   margin-bottom: 6px;
 }
 
 .game-subtitle {
-  font-size: 0.95rem;
-  color: #a4b3c4;
-  letter-spacing: 1px;
+  font-size: 0.96rem;
+  color: #a2b7cb;
+  letter-spacing: 1.2px;
 }
 
+/* 浮空玻璃舞台展示 */
 .menu-duck-stage {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 18px 0;
+  margin: 12px 0;
 }
 
 .stage-pedestal-glass {
   position: relative;
-  width: 140px;
-  height: 140px;
-  background: var(--glass-surface);
-  border: 2px solid var(--glass-border);
-  border-radius: 24px;
+  width: 156px;
+  height: 156px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(14, 25, 40, 0.65) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 240, 255, 0.25), inset 0 2px 2px rgba(255, 255, 255, 0.4);
 }
 
 .pedestal-glow {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
-  background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, rgba(0, 240, 255, 0) 70%);
-  animation: pedestal-pulse 2.4s ease-in-out infinite alternate;
+  inset: -6px;
+  border-radius: 32px;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.3) 0%, transparent 70%);
+  animation: pedestal-pulse 2.5s ease-in-out infinite alternate;
+}
+
+.pedestal-energy-ring {
+  position: absolute;
+  bottom: 12px;
+  width: 110px;
+  height: 24px;
+  border: 1.5px solid rgba(0, 240, 255, 0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.6);
+  animation: ring-rotate 6s linear infinite;
+}
+
+@keyframes ring-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes pedestal-pulse {
-  0% { opacity: 0.4; transform: scale(0.95); }
-  100% { opacity: 0.85; transform: scale(1.05); }
+  0% { opacity: 0.4; transform: scale(0.96); }
+  100% { opacity: 0.9; transform: scale(1.04); }
 }
 
-.menu-duck-figure {
-  z-index: 2;
-  animation: duck-gentle-bob 2.8s ease-in-out infinite alternate;
+.menu-duck-hero-img {
+  position: relative;
+  z-index: 3;
+  width: 116px;
+  height: 116px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+  animation: duck-hover-bob 2.8s ease-in-out infinite alternate;
 }
 
-@keyframes duck-gentle-bob {
-  0% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(-1.5deg); }
-  100% { transform: translateY(0) rotate(1.5deg); }
+@keyframes duck-hover-bob {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+  100% { transform: translateY(0px); }
 }
 
 .menu-record-card {
@@ -218,12 +267,13 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background: rgba(14, 21, 31, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  padding: 12px 16px;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(12, 18, 28, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 12px 18px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 
 .record-item {
@@ -235,47 +285,48 @@ html, body {
 .record-label {
   font-size: 0.72rem;
   color: var(--text-dim);
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   margin-bottom: 2px;
 }
 
 .record-val {
-  font-size: 1.25rem;
-  font-weight: 800;
+  font-size: 1.3rem;
+  font-weight: 900;
   color: var(--accent-gold);
+  text-shadow: 0 0 10px rgba(255, 200, 59, 0.5);
 }
 
 .record-divider {
   width: 1px;
-  height: 28px;
+  height: 30px;
   background: rgba(255, 255, 255, 0.1);
 }
 
 .menu-cta-container {
   width: 100%;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .btn-primary {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, #ffc83b 0%, #e09b00 100%);
-  color: #1a1000;
-  font-size: 1.25rem;
+  background: linear-gradient(180deg, #ffc83b 0%, #e59700 100%);
+  color: #170d00;
+  font-size: 1.28rem;
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   border: none;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 16px 24px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(230, 160, 0, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 28px rgba(230, 155, 0, 0.45), inset 0 2px 2px rgba(255, 255, 255, 0.5);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .btn-primary:active {
   transform: scale(0.96);
-  box-shadow: 0 3px 12px rgba(230, 160, 0, 0.3);
+  box-shadow: 0 4px 14px rgba(230, 155, 0, 0.35);
 }
 
 .btn-shine {
@@ -284,7 +335,7 @@ html, body {
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
   transform: skewX(-20deg);
   animation: btn-shine-anim 3s infinite;
 }
@@ -296,26 +347,28 @@ html, body {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(22, 32, 46, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: var(--text-main);
   font-size: 1rem;
-  font-weight: 700;
-  border-radius: 14px;
+  font-weight: 800;
+  border-radius: 16px;
   padding: 12px 18px;
   cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   transition: background 0.12s ease, transform 0.12s ease;
 }
 
 .btn-secondary:active {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(0, 240, 255, 0.18);
   transform: scale(0.96);
 }
 
 .menu-footer {
   font-size: 0.78rem;
-  color: #5a6978;
-  margin-top: 8px;
+  color: #65778a;
+  margin-top: 6px;
 }
 
 /* =========================================================
@@ -323,7 +376,7 @@ html, body {
    ========================================================= */
 .tutorial-scene {
   justify-content: flex-start;
-  gap: 16px;
+  gap: 14px;
 }
 
 .tutorial-header {
@@ -332,16 +385,17 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 8px;
 }
 
 .tutorial-badge {
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--accent-cyan);
   background: rgba(0, 240, 255, 0.12);
-  padding: 4px 12px;
-  border-radius: 12px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 4px 14px;
+  border-radius: 14px;
 }
 
 .btn-text {
@@ -355,11 +409,12 @@ html, body {
 
 .tutorial-prompt {
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 900;
   color: #fff;
   text-align: center;
   min-height: 38px;
-  margin: 10px 0 16px 0;
+  margin: 6px 0 12px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .tutorial-board-area {
@@ -381,14 +436,14 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(10, 14, 20, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: rgba(8, 12, 18, 0.88);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
   padding: 6px 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-  margin-top: 4px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  margin-top: 2px;
 }
 
 .hud-box {
@@ -400,57 +455,20 @@ html, body {
 .hud-label {
   font-size: 0.62rem;
   font-weight: 800;
-  color: #7b8b9a;
+  color: #8395a6;
   letter-spacing: 1.2px;
   margin-bottom: 2px;
 }
 
-/* 起跳台待命基座 (深色微光防滑強化玻璃) */
-.start-platform-dock {
-  position: relative;
-  width: min(72vw, 240px);
-  height: 42px;
-  margin: 12px auto 6px auto;
-  background: rgba(18, 28, 42, 0.55);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-}
-
-.dock-glow {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.2) 0%, transparent 70%);
-  animation: dock-pulse 2s ease-in-out infinite alternate;
-}
-
-@keyframes dock-pulse {
-  0% { opacity: 0.3; }
-  100% { opacity: 0.8; }
-}
-
-.dock-label {
-  position: relative;
-  z-index: 2;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: #6d8299;
-}
-
-/* 老式電子七段顯示器樣式 */
+/* 復古紅光七段數位儀表 */
 .seven-seg-cluster {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  background: #120305;
+  background: #0f0204;
   padding: 2px 4px;
   border-radius: 4px;
-  border: 1px solid #2a080d;
+  border: 1px solid #28060a;
 }
 
 .seven-seg-digit {
@@ -463,7 +481,7 @@ html, body {
 
 .seg.on {
   fill: var(--led-red-on);
-  filter: drop-shadow(0 0 3px rgba(255, 42, 59, 0.85));
+  filter: drop-shadow(0 0 3px rgba(255, 37, 58, 0.95));
 }
 
 .status-banner-wrapper {
@@ -471,7 +489,7 @@ html, body {
   width: 100%;
   max-width: 420px;
   text-align: center;
-  margin: 6px 0 10px 0;
+  margin: 4px 0 8px 0;
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -480,10 +498,10 @@ html, body {
 
 .status-prompt {
   font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  padding: 6px 18px;
-  border-radius: 20px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  padding: 6px 20px;
+  border-radius: 24px;
   transition: all 0.2s ease;
 }
 
@@ -494,14 +512,16 @@ html, body {
 
 .prompt-watch {
   color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.12);
-  border: 1px solid rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.14);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
 }
 
 .prompt-turn {
   color: var(--accent-gold);
-  background: rgba(255, 200, 59, 0.15);
-  border: 1px solid rgba(255, 200, 59, 0.35);
+  background: rgba(255, 200, 59, 0.16);
+  border: 1px solid rgba(255, 200, 59, 0.45);
+  box-shadow: 0 0 16px rgba(255, 200, 59, 0.3);
   animation: turn-prompt-pulse 1.2s ease-in-out infinite alternate;
 }
 
@@ -512,7 +532,8 @@ html, body {
 
 .prompt-clear {
   color: #4df5a8;
-  background: rgba(77, 245, 168, 0.15);
+  background: rgba(77, 245, 168, 0.18);
+  border: 1px solid rgba(77, 245, 168, 0.4);
 }
 
 /* 關卡晉級橫幅 (3x3 / 4x4) */
@@ -523,12 +544,12 @@ html, body {
   transform: translate(-50%, -50%) scale(0.9);
   white-space: nowrap;
   background: linear-gradient(90deg, #ffc83b, #ff821e);
-  color: #1a0800;
+  color: #150700;
   font-size: 0.95rem;
   font-weight: 900;
   padding: 8px 24px;
   border-radius: 30px;
-  box-shadow: 0 8px 25px rgba(255, 150, 0, 0.6);
+  box-shadow: 0 8px 25px rgba(255, 150, 0, 0.65);
   opacity: 0;
   pointer-events: none;
   z-index: 30;
@@ -546,6 +567,47 @@ html, body {
   width: min(88vw, 420px);
   aspect-ratio: 1;
   margin: auto 0;
+  z-index: 10;
+  overflow: visible;
+}
+
+/* 起跳台待命基座 */
+.start-platform-dock {
+  position: relative;
+  width: min(72vw, 240px);
+  height: 46px;
+  margin: 10px auto 4px auto;
+  background: linear-gradient(180deg, rgba(22, 36, 54, 0.8) 0%, rgba(10, 18, 30, 0.9) 100%);
+  border: 1.5px solid rgba(0, 240, 255, 0.5);
+  border-radius: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 0 18px rgba(0, 240, 255, 0.3);
+  z-index: 8;
+}
+
+.dock-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 23px;
+  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.35) 0%, transparent 75%);
+  animation: dock-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes dock-pulse {
+  0% { opacity: 0.35; transform: scale(0.98); }
+  100% { opacity: 0.9; transform: scale(1.02); }
+}
+
+.dock-label {
+  position: relative;
+  z-index: 2;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 2.2px;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.75);
 }
 
 /* =========================================================
@@ -556,25 +618,23 @@ html, body {
   width: 100%;
   height: 100%;
   display: grid;
-  gap: 12px;
   padding: 10px;
-  background: rgba(8, 14, 22, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  background: rgba(6, 12, 20, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 26px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.15);
   transition: transform 0.12s ease;
 }
 
-/* 鏡頭震動 (Camera Shake) */
 .camera-shake-active {
   animation: cam-shake 0.16s ease-in-out;
 }
 
 @keyframes cam-shake {
   0% { transform: translate(0, 0); }
-  25% { transform: translate(-6px, 4px); }
-  50% { transform: translate(5px, -3px); }
-  75% { transform: translate(-3px, 2px); }
+  25% { transform: translate(-7px, 5px); }
+  50% { transform: translate(6px, -4px); }
+  75% { transform: translate(-4px, 3px); }
   100% { transform: translate(0, 0); }
 }
 
@@ -627,31 +687,31 @@ html, body {
   border-radius: 12px;
 }
 
-/* 頂部高光斜角 */
+/* 玻璃頂部光澤斜角 */
 .glass-pane::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 38%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 100%);
+  height: 42%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 100%);
   border-radius: 16px 16px 0 0;
   pointer-events: none;
 }
 
-/* 題目亮燈光效層 */
+/* 題目亮燈光效層 (高能水晶青光發光核心) */
 .glass-glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgba(0, 240, 255, 0.8) 0%, rgba(0, 240, 255, 0.25) 60%, rgba(0, 240, 255, 0) 100%);
+  background: radial-gradient(circle at center, rgba(0, 240, 255, 0.88) 0%, rgba(0, 240, 255, 0.4) 55%, rgba(0, 150, 200, 0.1) 100%);
   opacity: 0;
   pointer-events: none;
 }
 
 .glass-tile.is-lit .glass-pane {
-  border-color: rgba(0, 240, 255, 0.85);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.6), inset 0 0 16px rgba(0, 240, 255, 0.5);
+  border-color: var(--glass-border-lit);
+  box-shadow: 0 0 32px rgba(0, 240, 255, 0.9), inset 0 0 20px rgba(0, 240, 255, 0.7);
 }
 
 .glass-tile.glow-active .glass-glow {
@@ -661,33 +721,34 @@ html, body {
 /* 序列步驟數字 */
 .glass-step-number {
   position: relative;
-  z-index: 3;
-  font-size: 2.8rem;
+  z-index: 4;
+  font-size: 3rem;
   font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 0 14px rgba(0, 240, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 18px rgba(0, 240, 255, 1), 0 3px 8px rgba(0, 0, 0, 0.95);
   opacity: 0;
   pointer-events: none;
-  font-family: var(--font-family);
 }
 
 .grid-size-3 .glass-step-number {
-  font-size: 2.1rem;
+  font-size: 2.3rem;
 }
 
 .grid-size-4 .glass-step-number {
-  font-size: 1.65rem;
+  font-size: 1.8rem;
 }
 
-/* 玩家點擊反饋 */
+/* 點擊反饋 */
 .tap-flash-success .glass-pane {
-  background: rgba(0, 240, 255, 0.5);
+  background: rgba(0, 240, 255, 0.6);
   border-color: var(--accent-cyan);
+  box-shadow: 0 0 28px rgba(0, 240, 255, 0.95);
 }
 
 .tap-flash-fail .glass-pane {
-  background: rgba(255, 42, 59, 0.55);
+  background: rgba(255, 37, 58, 0.65);
   border-color: var(--led-red-on);
+  box-shadow: 0 0 28px rgba(255, 37, 58, 0.95);
 }
 
 /* 玻璃裂紋層 */
@@ -695,7 +756,7 @@ html, body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 4;
+  z-index: 5;
 }
 
 .crack-svg {
@@ -716,17 +777,15 @@ html, body {
   to { stroke-dashoffset: 0; }
 }
 
-/* 整塊粉碎狀態：玻璃消失，露出深淵黑洞 */
 .glass-tile.is-shattered .glass-pane {
   visibility: hidden;
 }
 
-/* 預製多邊形破片 */
 .glass-shard {
   position: absolute;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(180, 220, 255, 0.5) 100%);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(180, 220, 255, 0.6) 100%);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
 /* =========================================================
@@ -736,7 +795,7 @@ html, body {
   width: 76px;
   height: 76px;
   margin-left: -38px;
-  margin-top: -46px;
+  margin-top: -50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -745,37 +804,51 @@ html, body {
 .duck-shadow {
   position: absolute;
   bottom: 2px;
-  width: 52px;
-  height: 12px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 75%);
+  width: 54px;
+  height: 13px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, transparent 75%);
   border-radius: 50%;
-  opacity: 0.4;
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  opacity: 0.45;
+  transition: transform 0.08s ease, opacity 0.08s ease;
 }
 
-.duck-body-container {
+.duck-flip-wrapper {
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform-origin: 50% 90%;
-  transition: transform 0.08s ease-out;
+  will-change: transform;
 }
 
-.duck-vector {
-  display: block;
+.duck-sprite-img {
+  position: relative;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+  pointer-events: none;
 }
 
-/* 呼吸動畫 */
-.duck-idle {
-  animation: duck-breath 2.2s ease-in-out infinite alternate;
+.duck-idle-anim {
+  animation: duck-subtle-float 2.4s ease-in-out infinite alternate;
 }
 
-@keyframes duck-breath {
-  0% { transform: scale(1, 1); }
-  100% { transform: scale(1.02, 0.98); }
+@keyframes duck-subtle-float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(1.2deg); }
+  100% { transform: translateY(0px) rotate(-0.8deg); }
+}
+
+.duck-jump-pose {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.7));
+}
+
+.duck-shock-pose {
+  filter: drop-shadow(0 4px 16px rgba(255, 60, 60, 0.6));
 }
 
 /* =========================================================
@@ -784,9 +857,9 @@ html, body {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(3, 6, 10, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(3, 5, 8, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -797,16 +870,16 @@ html, body {
 .modal-card {
   width: 100%;
   max-width: 360px;
-  background: rgba(18, 26, 38, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 24px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  background: rgba(16, 24, 36, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 26px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
   padding: 28px 24px;
   text-align: center;
 }
 
 .modal-title {
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-weight: 900;
   color: #fff;
   margin-bottom: 6px;
@@ -829,12 +902,12 @@ html, body {
 }
 
 .skull-icon {
-  font-size: 2.4rem;
+  font-size: 2.5rem;
   margin-bottom: 4px;
 }
 
 .game-over-title {
-  font-size: 1.9rem;
+  font-size: 2rem;
   font-weight: 900;
   color: var(--led-red-on);
   letter-spacing: 2px;
@@ -843,14 +916,14 @@ html, body {
 
 .game-over-subtitle {
   font-size: 0.92rem;
-  color: #a0b0c0;
+  color: #a4b4c4;
   margin-top: 4px;
 }
 
 .final-score-panel {
-  background: rgba(10, 14, 22, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  background: rgba(8, 12, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
   padding: 14px 18px;
   margin-bottom: 18px;
 }
@@ -869,7 +942,7 @@ html, body {
 
 .final-score-row .val {
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 900;
   color: #fff;
 }
 
@@ -887,11 +960,11 @@ html, body {
 
 .new-record-badge {
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 900;
   color: #ffd700;
   background: rgba(255, 215, 0, 0.15);
-  border: 1px solid rgba(255, 215, 0, 0.4);
-  padding: 6px 14px;
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  padding: 6px 16px;
   border-radius: 20px;
   margin-bottom: 16px;
   display: inline-block;

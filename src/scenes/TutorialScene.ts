@@ -56,6 +56,7 @@ export class TutorialScene {
 
   start(): void {
     this.board.setupGrid(2);
+    this.duck.setGridSize(2);
     this.playerStep = 0;
     this.isShowingSequence = false;
 
@@ -107,36 +108,41 @@ export class TutorialScene {
   private handleTileTap(tileIndex: number): void {
     if (this.isShowingSequence || this.isDestroyed) return;
 
+    if (this.duck.getIsMoving()) {
+      this.duck.finishCurrentJump();
+    }
+
     const targetPos = this.board.getTileCenter(tileIndex);
     const expected = this.sequence[this.playerStep];
+    const tile = this.board.getTile(tileIndex);
 
     if (tileIndex === expected) {
-      // 答對
-      this.duck.jumpTo(targetPos.x, targetPos.y, () => {
-        const tile = this.board.getTile(tileIndex);
-        tile?.tapFlash(true);
-      });
+      // 答對該步：立即回饋閃光
+      tile?.tapFlash(true);
 
+      const isLastStep = this.playerStep + 1 >= this.sequence.length;
       this.playerStep++;
-      if (this.playerStep >= this.sequence.length) {
-        // 完成教學
-        this.board.setInteractive(false);
-        this.promptTextEl.textContent = '🎉 太棒了！準備開始第 1 關';
-        AudioManager.playLevelClear();
-        setTimeout(() => {
-          this.finish();
-        }, 650);
-      }
+
+      this.duck.jumpTo(targetPos.x, targetPos.y, () => {
+        if (isLastStep) {
+          // 完成教學
+          this.board.setInteractive(false);
+          this.promptTextEl.textContent = '🎉 太棒了！準備開始第 1 關';
+          AudioManager.playLevelClear();
+          setTimeout(() => {
+            this.finish();
+          }, 650);
+        }
+      });
     } else {
       // 點錯，親切提示重新觀看
+      tile?.tapFlash(false);
       this.duck.jumpTo(targetPos.x, targetPos.y, () => {
-        const tile = this.board.getTile(tileIndex);
-        tile?.tapFlash(false);
+        this.promptTextEl.textContent = '💡 沒關係，再看一次！';
+        setTimeout(() => {
+          this.runSequencePresentation();
+        }, 500);
       });
-      this.promptTextEl.textContent = '💡 沒關係，再看一次！';
-      setTimeout(() => {
-        this.runSequencePresentation();
-      }, 500);
     }
   }
 

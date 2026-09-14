@@ -47,7 +47,7 @@ export class GameScene {
     this.element.className = 'scene-container game-scene';
 
     this.element.innerHTML = `
-      <!-- 頂部 HUD (老式實驗室紅色七段電子數位儀表) -->
+      <!-- 頂部 HUD (復古工業儀表風格紅色 7 段 LED 數位顯示器) -->
       <header class="game-hud">
         <div class="hud-box">
           <div class="hud-label">LEVEL</div>
@@ -232,8 +232,9 @@ export class GameScene {
       }, 1400);
     }
 
-    // 初始化棋盤網格
+    // 初始化棋盤網格與鴨鴨縮放比例
     this.board.setupGrid(this.currentLevelConfig.gridSize);
+    this.duck.setGridSize(this.currentLevelConfig.gridSize);
     this.updateHud();
 
     // 鴨鴨初始就位於起跳台，絕不遮擋任何棋盤格子與數字
@@ -317,26 +318,38 @@ export class GameScene {
 
   /**
    * 處理玩家點擊格子
+   * 動畫邏輯優化：
+   * 1. 點擊瞬間即刻觸發格子高亮反饋與音效，確保 0 延遲體感
+   * 2. 鴨鴨起跳並轉向目標格
+   * 3. 唯有在最後一步且「落地完成後」才執行過關判定，防止跳躍中途切關卡
    */
   private handlePlayerTileTap(tileIndex: number): void {
     if (!this.stateManager.canAcceptInput()) return;
 
+    // 若玩家在起跳途中再次點選下一格，立即完成前一跳並安全推進
+    if (this.duck.getIsMoving()) {
+      this.duck.finishCurrentJump();
+      if (!this.stateManager.canAcceptInput()) return;
+    }
+
     const expectedTile = this.currentSequence[this.playerInputStep];
     const targetPos = this.board.getTileCenter(tileIndex);
+    const tile = this.board.getTile(tileIndex);
 
     if (tileIndex === expectedTile) {
-      // 答對該步
-      this.duck.jumpTo(targetPos.x, targetPos.y, () => {
-        const tile = this.board.getTile(tileIndex);
-        tile?.tapFlash(true);
-      });
+      // 答對該步：立即觸發格子高亮微波
+      tile?.tapFlash(true);
 
+      const isLastStep = this.playerInputStep + 1 >= this.currentSequence.length;
       this.playerInputStep++;
 
-      // 檢查是否全數答對完成本關
-      if (this.playerInputStep >= this.currentSequence.length) {
-        this.handleLevelClear();
-      }
+      // 鴨鴨跳向目標格
+      this.duck.jumpTo(targetPos.x, targetPos.y, () => {
+        // 落地瞬間檢查是否全數答對
+        if (isLastStep) {
+          this.handleLevelClear();
+        }
+      });
     } else {
       // 答錯！觸發玻璃碎裂與深淵墜落演出
       this.handlePlayerMistake(tileIndex);
@@ -365,7 +378,7 @@ export class GameScene {
 
   /**
    * 答錯演出：
-   * 鴨鴨跳往點擊的錯誤格子 -> 落地第一條裂痕 -> ~100ms 擴散 -> 碎裂 -> 鴨鴨驚恐摔入深淵 -> Game Over
+   * 鴨鴨跳往點擊的錯誤格子 -> 落地第一條裂痕 -> ~100ms 擴散 -> 碎裂 -> 鴨鴨驚恐表情下墜深淵 -> Game Over
    */
   private async handlePlayerMistake(wrongTileIndex: number): Promise<void> {
     this.stateManager.setState('GAME_OVER');
@@ -373,6 +386,9 @@ export class GameScene {
 
     const wrongTile = this.board.getTile(wrongTileIndex);
     const targetPos = this.board.getTileCenter(wrongTileIndex);
+
+    // 點擊錯誤格子瞬間紅光反饋
+    wrongTile?.tapFlash(false);
 
     // 鴨鴨先跳向該格
     this.duck.jumpTo(targetPos.x, targetPos.y, async () => {

@@ -81,11 +81,11 @@ export class Board {
     }
 
     const tileRect = tile.element.getBoundingClientRect();
-    const boardRect = this.element.getBoundingClientRect();
+    const parentRect = (this.element.parentElement || this.element).getBoundingClientRect();
 
     return {
-      x: tileRect.left - boardRect.left + tileRect.width / 2,
-      y: tileRect.top - boardRect.top + tileRect.height / 2,
+      x: tileRect.left - parentRect.left + tileRect.width / 2,
+      y: tileRect.top - parentRect.top + tileRect.height / 2,
     };
   }
 
