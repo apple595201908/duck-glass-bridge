@@ -3,6 +3,7 @@ import { AudioManager } from '../core/AudioManager';
 import duckIdleUrl from '../assets/duck_idle.png';
 import duckJumpUrl from '../assets/duck_jump.png';
 import duckShockUrl from '../assets/duck_shock.png';
+import duckCelebrateUrl from '../assets/duck_celebrate.png';
 
 export class DuckController {
   private container: HTMLElement;
@@ -19,7 +20,7 @@ export class DuckController {
   private isMoving = false;
   private animationFrameId: number | null = null;
   private moveStartTime = 0;
-  private moveDuration = 145; // 130-160ms 極速流暢起跳
+  private moveDuration = 230; // 220-240ms 最佳卡通跳躍反饋與彈性質感
   private startX = 0;
   private startY = 0;
   private currentOnLand?: () => void;
@@ -30,6 +31,7 @@ export class DuckController {
     jump: duckJumpUrl,
     surprised: duckShockUrl,
     falling: duckShockUrl,
+    celebrate: duckCelebrateUrl,
   };
 
   constructor(parent: HTMLElement) {
@@ -47,7 +49,7 @@ export class DuckController {
     this.shadowElement.className = 'duck-shadow';
     this.container.appendChild(this.shadowElement);
 
-    // 水平翻轉與跳躍伸展包裝層 (獨立處理 scale 與朝向，徹底隔絕 CSS 呼吸動畫衝突)
+    // 水平翻轉與跳躍伸展包裝層 (獨立處理 scale、朝向與微傾角)
     this.flipWrapper = document.createElement('div');
     this.flipWrapper.className = 'duck-flip-wrapper';
 
@@ -60,7 +62,7 @@ export class DuckController {
     this.flipWrapper.appendChild(this.duckImg);
     this.container.appendChild(this.flipWrapper);
 
-    // 預加載圖片
+    // 預加載全部圖片
     Object.values(DuckController.SPRITE_PATHS).forEach((src) => {
       const preload = new Image();
       preload.src = src;
@@ -80,7 +82,7 @@ export class DuckController {
     } else {
       this.gridScale = 0.72;
     }
-    this.updateTransform(0, 1, 1);
+    this.updateTransform(0, 1, 1, 0);
   }
 
   setState(state: DuckState): void {
@@ -93,6 +95,9 @@ export class DuckController {
     } else if (state === 'surprised' || state === 'falling') {
       this.duckImg.src = DuckController.SPRITE_PATHS.surprised;
       this.duckImg.className = 'duck-sprite-img duck-shock-pose';
+    } else if (state === 'celebrate') {
+      this.duckImg.src = DuckController.SPRITE_PATHS.celebrate;
+      this.duckImg.className = 'duck-sprite-img duck-celebrate-pose';
     } else {
       this.duckImg.src = DuckController.SPRITE_PATHS.idle;
       this.duckImg.className = 'duck-sprite-img duck-idle-anim';
@@ -109,7 +114,7 @@ export class DuckController {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
     }
-    this.updateTransform(0, 1, 1);
+    this.updateTransform(0, 1, 1, 0);
   }
 
   /**
@@ -124,7 +129,7 @@ export class DuckController {
     this.isMoving = false;
     this.currentX = this.targetX;
     this.currentY = this.targetY;
-    this.updateTransform(0, 1, 1);
+    this.updateTransform(0, 1, 1, 0);
     this.shadowElement.style.transform = 'scale(1)';
     this.shadowElement.style.opacity = '0.45';
     this.setState('idle');
@@ -139,15 +144,16 @@ export class DuckController {
   /**
    * 跳向目標格子
    * 具備：
-   * 1. 水平自動翻轉朝向 (Facing Direction: 往右走朝右、往左走朝左)
-   * 2. 起跳下蹲 (Squash) ➔ 空中換 Jump 圖拉長 (Stretch) ➔ 落地瞬間彈性擠壓
-   * 3. 影子動態縮放與透明度
+   * 1. 根據跳躍距離動態計算拋物線最高點
+   * 2. 平滑卡通 Squash & Stretch (非線性彈性過渡)
+   * 3. 移動方向微傾角與動態影子大小
+   * 4. 落地回彈彈性曲線 (Elastic Bounce)
    */
   jumpTo(x: number, y: number, onLand?: () => void): void {
-    // 依據移動方向自動翻轉角色
-    if (x > this.currentX + 5) {
+    // 依據水平位移自動翻轉角色
+    if (x > this.currentX + 6) {
       this.facingDir = 1;
-    } else if (x < this.currentX - 5) {
+    } else if (x < this.currentX - 6) {
       this.facingDir = -1;
     }
 
@@ -156,6 +162,10 @@ export class DuckController {
     this.targetX = x;
     this.targetY = y;
     this.currentOnLand = onLand;
+
+    const distance = Math.hypot(x - this.startX, y - this.startY);
+    // 根據距離動態決定弧線高度 (35px ~ 66px)
+    const maxArc = Math.min(66, Math.max(34, distance * 0.24));
 
     AudioManager.playJump();
     this.setState('prepare');
@@ -170,41 +180,54 @@ export class DuckController {
       const elapsed = now - this.moveStartTime;
       const progress = Math.min(1, elapsed / this.moveDuration);
 
-      // 線性位置插值
+      // 平滑線性插值位置
       const curX = this.startX + (this.targetX - this.startX) * progress;
       const curY = this.startY + (this.targetY - this.startY) * progress;
 
-      // 拋物線高度 (最高約 44px)
-      const arcHeight = Math.sin(progress * Math.PI) * 44;
+      // 拋物線重力弧線 (4 * p * (1 - p))
+      const arcFactor = 4 * progress * (1 - progress);
+      const arcHeight = arcFactor * maxArc;
 
-      // 彈性 squash & stretch
+      // 平滑非線性 squash & stretch
       let scaleX = 1;
       let scaleY = 1;
+      let tilt = 0;
 
-      if (progress < 0.15) {
-        // 起跳微蹲
+      if (progress < 0.14) {
+        // 起跳下蹲預備 (Squash)
         this.setState('prepare');
-        scaleX = 1.15;
-        scaleY = 0.85;
-      } else if (progress < 0.82) {
-        // 空中伸展並切換為飛躍翅膀姿態
+        const t = progress / 0.14;
+        scaleX = 1 + 0.18 * t;
+        scaleY = 1 - 0.18 * t;
+      } else if (progress < 0.45) {
+        // 衝向頂點拉長 (Stretch)
         this.setState('jump');
-        scaleX = 0.92;
-        scaleY = 1.16;
+        const t = (progress - 0.14) / 0.31;
+        scaleX = 1.18 - 0.28 * t; // 1.18 -> 0.90
+        scaleY = 0.82 + 0.33 * t; // 0.82 -> 1.15
+        tilt = Math.sin(t * Math.PI * 0.5) * 8 * this.facingDir;
+      } else if (progress < 0.85) {
+        // 下落微收 (Apex to descent)
+        this.setState('jump');
+        const t = (progress - 0.45) / 0.40;
+        scaleX = 0.90 + 0.12 * t; // 0.90 -> 1.02
+        scaleY = 1.15 - 0.12 * t; // 1.15 -> 1.03
+        tilt = (1 - t) * 8 * this.facingDir;
       } else {
-        // 落地觸地瞬間擠壓
+        // 觸地壓縮 (Touchdown Squash)
         this.setState('landing');
-        const landT = (progress - 0.82) / 0.18;
-        scaleX = 1.18 - 0.18 * landT;
-        scaleY = 0.82 + 0.18 * landT;
+        const t = (progress - 0.85) / 0.15;
+        scaleX = 1.02 + 0.18 * Math.sin(t * Math.PI);
+        scaleY = 1.03 - 0.22 * Math.sin(t * Math.PI);
+        tilt = 0;
       }
 
       this.currentX = curX;
       this.currentY = curY;
-      this.updateTransform(arcHeight, scaleX, scaleY);
+      this.updateTransform(arcHeight, scaleX, scaleY, tilt);
 
-      // 影子高度響應
-      const shadowRatio = 1 - (arcHeight / 44) * 0.55;
+      // 影子高度與透明度響應
+      const shadowRatio = Math.max(0.35, 1 - (arcHeight / maxArc) * 0.55);
       this.shadowElement.style.transform = `scale(${shadowRatio})`;
       this.shadowElement.style.opacity = `${0.45 * shadowRatio}`;
 
@@ -216,17 +239,15 @@ export class DuckController {
         this.setState('landing');
         AudioManager.playLanding();
 
+        // 觸發落地回呼
         const cb = this.currentOnLand;
         this.currentOnLand = undefined;
         if (cb) {
           cb();
         }
 
-        setTimeout(() => {
-          if (this.currentState === 'landing') {
-            this.setState('idle');
-          }
-        }, 70);
+        // 著地二次彈性回彈 (Juicy Elastic Jiggle: 80ms)
+        this.playLandingBounce();
       }
     };
 
@@ -234,7 +255,82 @@ export class DuckController {
   }
 
   /**
-   * 掉入深淵動畫：露出巨大驚恐表情，失重旋轉墜入黑洞
+   * 著地彈性緩衝二次微彈
+   */
+  private playLandingBounce(): void {
+    const bounceStart = performance.now();
+    const bounceDuration = 120;
+
+    const tickBounce = (now: number) => {
+      const elapsed = now - bounceStart;
+      const progress = Math.min(1, elapsed / bounceDuration);
+      // 衰減正弦彈性回正
+      const decay = 1 - progress;
+      const wave = Math.sin(progress * Math.PI * 2) * 0.08 * decay;
+      const sX = 1 + wave;
+      const sY = 1 - wave;
+
+      this.updateTransform(0, sX, sY, 0);
+
+      if (progress < 1 && !this.isMoving) {
+        requestAnimationFrame(tickBounce);
+      } else {
+        if (!this.isMoving && (this.currentState === 'landing' || this.currentState === 'prepare')) {
+          this.setState('idle');
+          this.updateTransform(0, 1, 1, 0);
+        }
+      }
+    };
+
+    requestAnimationFrame(tickBounce);
+  }
+
+  /**
+   * 過關慶祝勝利跳躍 (Victory Cheer)
+   */
+  celebrateClear(onComplete?: () => void): void {
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+
+    this.setState('celebrate');
+    const startTime = performance.now();
+    const duration = 520;
+
+    const animateCelebrate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+
+      // 歡樂向上躍起並平穩落回
+      const arc = Math.sin(progress * Math.PI) * 32;
+      const wave = Math.sin(progress * Math.PI * 4) * 0.06;
+      const scaleX = 1 + wave;
+      const scaleY = 1 - wave;
+
+      this.updateTransform(arc, scaleX, scaleY, 0);
+      const shadowRatio = Math.max(0.5, 1 - (arc / 32) * 0.4);
+      this.shadowElement.style.transform = `scale(${shadowRatio})`;
+      this.shadowElement.style.opacity = `${0.45 * shadowRatio}`;
+
+      if (progress < 1) {
+        requestAnimationFrame(animateCelebrate);
+      } else {
+        this.updateTransform(0, 1, 1, 0);
+        this.shadowElement.style.transform = 'scale(1)';
+        this.shadowElement.style.opacity = '0.45';
+        if (onComplete) {
+          onComplete();
+        }
+      }
+    };
+
+    requestAnimationFrame(animateCelebrate);
+  }
+
+  /**
+   * 掉入深淵動畫：露出巨大驚恐表情，失重螺旋旋轉墜入黑洞
+   * 已修復：完全分離外層平移與內層方向縮放，徹底消除反向翻轉問題
    */
   playFallIntoAbyss(onComplete?: () => void): void {
     if (this.animationFrameId !== null) {
@@ -246,7 +342,7 @@ export class DuckController {
     AudioManager.playFalling();
 
     const fallStart = performance.now();
-    const fallDuration = 900;
+    const fallDuration = 950;
     const startY = this.currentY;
 
     this.shadowElement.style.opacity = '0';
@@ -256,13 +352,22 @@ export class DuckController {
       const progress = Math.min(1, elapsed / fallDuration);
 
       // 重力加速度深淵下墜
-      const dropOffset = Math.pow(progress, 2.3) * 500;
-      const rot = progress * 160 * this.facingDir;
-      const scale = Math.max(0.05, 1 - progress * 0.85);
-      const opacity = Math.max(0, 1 - progress * 1.25);
+      const dropOffset = Math.pow(progress, 2.2) * 580;
+      // 驚恐螺旋打轉 (同朝向旋轉)
+      const rot = progress * 260 * this.facingDir;
+      // 遠離視角縮小
+      const scale = Math.max(0.02, 1 - progress * 0.94);
+      // 加速消隱
+      const opacity = Math.max(0, 1 - Math.pow(progress, 1.4));
 
-      this.container.style.transform = `translate3d(${this.currentX}px, ${startY + dropOffset}px, 0) scale(${scale * this.facingDir}, ${scale}) rotate(${rot}deg)`;
+      // 容器只負責世界座標平移
+      this.container.style.transform = `translate3d(${this.currentX}px, ${startY + dropOffset}px, 0)`;
       this.container.style.opacity = `${opacity}`;
+
+      // 內層封裝層負責朝向、等比縮放與螺旋旋轉，絕不相互衝突
+      const finalScaleX = scale * this.facingDir * this.gridScale;
+      const finalScaleY = scale * this.gridScale;
+      this.flipWrapper.style.transform = `scale(${finalScaleX}, ${finalScaleY}) rotate(${rot}deg)`;
 
       if (progress < 1) {
         requestAnimationFrame(animateFall);
@@ -287,11 +392,11 @@ export class DuckController {
     this.setPosition(x, y);
   }
 
-  private updateTransform(arcHeight: number, scaleX: number, scaleY: number): void {
+  private updateTransform(arcHeight: number, scaleX: number, scaleY: number, tiltAngle = 0): void {
     const finalScaleX = scaleX * this.facingDir * this.gridScale;
     const finalScaleY = scaleY * this.gridScale;
     this.container.style.transform = `translate3d(${this.currentX}px, ${this.currentY - arcHeight}px, 0)`;
-    this.flipWrapper.style.transform = `scale(${finalScaleX}, ${finalScaleY})`;
+    this.flipWrapper.style.transform = `scale(${finalScaleX}, ${finalScaleY}) rotate(${tiltAngle}deg)`;
   }
 
   getIsMoving(): boolean {
@@ -301,5 +406,8 @@ export class DuckController {
   getElement(): HTMLElement {
     return this.container;
   }
-}
 
+  getCurrentPosition(): { x: number; y: number } {
+    return { x: this.currentX, y: this.currentY };
+  }
+}

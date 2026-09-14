@@ -23,15 +23,15 @@ export class GlassTile {
     this.element.setAttribute('type', 'button');
     this.element.setAttribute('aria-label', `Tile ${index + 1}`);
 
-    // 玻璃主體 (多層擬真：高光斜角、深色磨砂透光)
+    // 玻璃主體 (多層擬真：極致高光斜角、深色微磨砂折射晶體)
     this.innerPane = document.createElement('div');
     this.innerPane.className = 'glass-pane';
 
-    // 亮起光效層 (強烈翡翠水晶青光 / 琥珀金光)
+    // 亮起光效層 (強烈極光青光 / 能量霓虹)
     this.glowLayer = document.createElement('div');
     this.glowLayer.className = 'glass-glow';
 
-    // 序列數字徽章 (清楚可讀，淡入 -> 停留 -> 淡出)
+    // 序列數字徽章 (醒目可讀，淡入 -> 停留 -> 淡出)
     this.numberBadge = document.createElement('div');
     this.numberBadge.className = 'glass-step-number';
 
@@ -50,7 +50,7 @@ export class GlassTile {
    * 遵循嚴格規範：
    * 1. 總時長 onMs (不得低於 700ms)
    * 2. 約前 80ms 淡入
-   * 3. 中間約 (onMs - 160ms) 清楚停留，數字 1, 2, 3 醒目可讀
+   * 3. 中間清楚停留，數字 1, 2, 3 醒目立體可讀
    * 4. 最後約 80ms 淡出
    * 5. 播完後有 gapMs 熄滅間隔
    */
@@ -58,7 +58,7 @@ export class GlassTile {
     this.resetVisuals();
     this.numberBadge.textContent = stepNumber.toString();
     this.numberBadge.style.opacity = '0';
-    this.numberBadge.style.transform = 'scale(0.85)';
+    this.numberBadge.style.transform = 'scale(0.82)';
 
     this.element.classList.add('is-lit');
     AudioManager.playTileTone();
@@ -68,7 +68,7 @@ export class GlassTile {
     const fadeOutMs = 80;
     const holdMs = Math.max(200, onMs - fadeInMs - fadeOutMs);
 
-    this.numberBadge.style.transition = `opacity ${fadeInMs}ms ease-out, transform ${fadeInMs}ms ease-out`;
+    this.numberBadge.style.transition = `opacity ${fadeInMs}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${fadeInMs}ms cubic-bezier(0.16, 1, 0.3, 1)`;
     this.glowLayer.style.transition = `opacity ${fadeInMs}ms ease-out`;
 
     requestAnimationFrame(() => {
@@ -86,7 +86,7 @@ export class GlassTile {
 
     this.element.classList.remove('glow-active');
     this.numberBadge.style.opacity = '0';
-    this.numberBadge.style.transform = 'scale(0.9)';
+    this.numberBadge.style.transform = 'scale(0.88)';
 
     await new Promise((resolve) => setTimeout(resolve, fadeOutMs));
     this.element.classList.remove('is-lit');
@@ -100,7 +100,21 @@ export class GlassTile {
     this.element.classList.add(flashClass);
     setTimeout(() => {
       this.element.classList.remove(flashClass);
-    }, 180);
+    }, 200);
+  }
+
+  /**
+   * 鴨鴨著地時產生的衝擊漣漪光環 (Juicy Land Feedback)
+   */
+  spawnLandRipple(): void {
+    const ripple = document.createElement('div');
+    ripple.className = 'glass-land-ripple';
+    this.innerPane.appendChild(ripple);
+    setTimeout(() => {
+      if (ripple.parentElement) {
+        ripple.parentElement.removeChild(ripple);
+      }
+    }, 420);
   }
 
   /**
@@ -116,7 +130,7 @@ export class GlassTile {
     this.crackLayer.innerHTML = `
       <svg class="crack-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
         <!-- 初始第一道衝擊主裂紋 -->
-        <path class="crack-line crack-primary" d="M 50 50 L 35 30 L 22 15 M 50 50 L 68 38 L 85 22" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none" />
+        <path class="crack-line crack-primary" d="M 50 50 L 35 30 L 22 15 M 50 50 L 68 38 L 85 22" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" fill="none" />
       </svg>
     `;
     this.crackLayer.classList.add('cracking-stage-1');
@@ -127,10 +141,10 @@ export class GlassTile {
     this.crackLayer.innerHTML = `
       <svg class="crack-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
         <!-- 全面蜘蛛網狀深度碎裂紋 -->
-        <path class="crack-line" d="M 50 50 L 35 30 L 22 15 M 50 50 L 68 38 L 85 22" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none" />
-        <path class="crack-line" d="M 50 50 L 52 75 L 48 95 M 50 50 L 32 62 L 12 78" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" />
-        <path class="crack-line" d="M 50 50 L 72 65 L 90 82 M 35 30 L 52 20 L 70 25" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" fill="none" />
-        <path class="crack-line" d="M 32 62 L 52 75 L 72 65 M 22 15 L 12 40 L 32 62" stroke="#d5eeff" stroke-width="1.3" stroke-linecap="round" fill="none" />
+        <path class="crack-line" d="M 50 50 L 35 30 L 22 15 M 50 50 L 68 38 L 85 22" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" fill="none" />
+        <path class="crack-line" d="M 50 50 L 52 75 L 48 95 M 50 50 L 32 62 L 12 78" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none" />
+        <path class="crack-line" d="M 50 50 L 72 65 L 90 82 M 35 30 L 52 20 L 70 25" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none" />
+        <path class="crack-line" d="M 32 62 L 52 75 L 72 65 M 22 15 L 12 40 L 32 62" stroke="#d5eeff" stroke-width="1.4" stroke-linecap="round" fill="none" />
       </svg>
     `;
     this.crackLayer.classList.add('cracking-stage-2');
@@ -156,6 +170,9 @@ export class GlassTile {
     this.crackLayer.className = 'glass-cracks';
     this.glowLayer.style.opacity = '';
     this.element.classList.remove('is-lit', 'glow-active', 'is-shattered');
+
+    const ripples = this.innerPane.querySelectorAll('.glass-land-ripple');
+    ripples.forEach((r) => r.parentElement?.removeChild(r));
   }
 
   getCenterCoordinates(): { x: number; y: number } {

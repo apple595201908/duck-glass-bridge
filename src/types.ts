@@ -29,7 +29,8 @@ export type DuckState =
   | 'jump'
   | 'landing'
   | 'surprised'
-  | 'falling';
+  | 'falling'
+  | 'celebrate';
 
 export interface ScoreState {
   currentLevel: number;

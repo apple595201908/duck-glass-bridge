@@ -31,6 +31,9 @@ export class GameScene {
   private playerInputStep = 0;
   private inputStartTime = 0;
 
+  // 鴨鴨定位錨點 (用於視窗縮放與響應式重定位)
+  private currentDuckAnchor: { type: 'dock' } | { type: 'tile'; index: number } = { type: 'dock' };
+
   // 暫停與播放恢復控制
   private sequenceStepIndex = 0;
   private isSequenceCancelled = false;
@@ -201,6 +204,30 @@ export class GameScene {
     shareBtn?.addEventListener('click', () => {
       this.shareScore();
     });
+
+    // 監聽視窗縮放，保持鴨鴨精確錨定在格子或停泊台中央
+    window.addEventListener('resize', () => {
+      if (!this.duck.getIsMoving()) {
+        this.updateDuckPositionToAnchor();
+      }
+    });
+  }
+
+  private updateDuckPositionToAnchor(): void {
+    if (this.currentDuckAnchor.type === 'dock') {
+      const dock = this.element.querySelector('#startPlatformDock');
+      const boardArea = this.element.querySelector('#gameBoardContainer');
+      if (dock && boardArea) {
+        const dRect = dock.getBoundingClientRect();
+        const bRect = boardArea.getBoundingClientRect();
+        const x = dRect.left - bRect.left + dRect.width / 2;
+        const y = dRect.top - bRect.top + dRect.height / 2;
+        this.duck.setPosition(x, y);
+      }
+    } else {
+      const pos = this.board.getTileCenter(this.currentDuckAnchor.index);
+      this.duck.setPosition(pos.x, pos.y);
+    }
   }
 
   /**
@@ -238,6 +265,7 @@ export class GameScene {
     this.updateHud();
 
     // 鴨鴨初始就位於起跳台，絕不遮擋任何棋盤格子與數字
+    this.currentDuckAnchor = { type: 'dock' };
     requestAnimationFrame(() => {
       const dock = this.element.querySelector('#startPlatformDock');
       const boardArea = this.element.querySelector('#gameBoardContainer');
@@ -336,6 +364,8 @@ export class GameScene {
     const targetPos = this.board.getTileCenter(tileIndex);
     const tile = this.board.getTile(tileIndex);
 
+    this.currentDuckAnchor = { type: 'tile', index: tileIndex };
+
     if (tileIndex === expectedTile) {
       // 答對該步：立即觸發格子高亮微波
       tile?.tapFlash(true);
@@ -345,6 +375,7 @@ export class GameScene {
 
       // 鴨鴨跳向目標格
       this.duck.jumpTo(targetPos.x, targetPos.y, () => {
+        tile?.spawnLandRipple();
         // 落地瞬間檢查是否全數答對
         if (isLastStep) {
           this.handleLevelClear();
@@ -368,11 +399,16 @@ export class GameScene {
     this.scoreManager.addLevelScore(this.currentLevelConfig, duration);
     this.updateHud();
 
-    this.statusPromptEl.textContent = '✨ 過關！';
+    this.statusPromptEl.textContent = '🎉 完美過關！';
     this.statusPromptEl.className = 'status-prompt prompt-clear';
 
-    // 等待約 600ms 成功慶祝後自動進入下一關
-    await new Promise((r) => setTimeout(r, this.currentLevelConfig.timing.levelClearDelayMs));
+    // 鴨鴨戴上金冠歡樂跳躍慶祝
+    await new Promise<void>((resolve) => {
+      this.duck.celebrateClear(() => resolve());
+    });
+
+    // 短暫慶祝停留後自動進入下一關
+    await new Promise((r) => setTimeout(r, 220));
     this.loadLevel(this.currentLevelConfig.level + 1);
   }
 
@@ -392,6 +428,7 @@ export class GameScene {
 
     // 鴨鴨先跳向該格
     this.duck.jumpTo(targetPos.x, targetPos.y, async () => {
+      wrongTile?.spawnLandRipple();
       // 落地瞬間：玻璃出現第一條裂紋並擴散
       if (wrongTile) {
         await wrongTile.startCracking();

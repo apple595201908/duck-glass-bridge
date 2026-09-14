@@ -4,20 +4,21 @@
    ========================================================= */
 
 :root {
-  --bg-deep-abyss: #06090e;
-  --glass-border: rgba(255, 255, 255, 0.24);
-  --glass-border-lit: rgba(0, 240, 255, 0.95);
-  --glass-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(16, 26, 42, 0.6) 100%);
-  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.75), inset 0 1.5px 2px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.6);
+  --bg-deep-abyss: #05080e;
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --glass-border-hover: rgba(0, 240, 255, 0.6);
+  --glass-border-lit: rgba(0, 245, 255, 1);
+  --glass-surface: linear-gradient(140deg, rgba(255, 255, 255, 0.16) 0%, rgba(12, 22, 36, 0.65) 60%, rgba(6, 12, 22, 0.85) 100%);
+  --glass-shadow: 0 14px 34px rgba(0, 0, 0, 0.82), inset 0 2px 2px rgba(255, 255, 255, 0.35), inset 0 -2px 6px rgba(0, 0, 0, 0.7);
   --accent-cyan: #00f0ff;
-  --accent-cyan-glow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(0, 240, 255, 0.45);
+  --accent-cyan-glow: 0 0 28px rgba(0, 240, 255, 0.85), 0 0 56px rgba(0, 240, 255, 0.4);
   --accent-gold: #ffc83b;
-  --accent-gold-glow: 0 0 24px rgba(255, 200, 59, 0.85);
+  --accent-gold-glow: 0 0 28px rgba(255, 200, 59, 0.9);
   --led-red-on: #ff253a;
-  --led-red-glow: 0 0 8px rgba(255, 37, 58, 0.9), 0 0 18px rgba(255, 37, 58, 0.4);
+  --led-red-glow: 0 0 8px rgba(255, 37, 58, 0.95), 0 0 18px rgba(255, 37, 58, 0.45);
   --led-red-off: rgba(55, 6, 12, 0.6);
   --text-main: #f2f7fc;
-  --text-dim: #8494a5;
+  --text-dim: #8ba0b5;
   --font-family: 'Chakra Petch', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
 }
 
@@ -37,7 +38,7 @@ html, body {
   background-color: var(--bg-deep-abyss);
   background-image: url('./assets/abyss_bg.webp');
   background-size: cover;
-  background-position: center bottom;
+  background-position: center center;
   background-repeat: no-repeat;
   font-family: var(--font-family);
   color: var(--text-main);
@@ -53,30 +54,30 @@ body::before {
   position: fixed;
   inset: 0;
   background-image: 
-    radial-gradient(1.5px 1.5px at 20% 30%, rgba(0, 240, 255, 0.75), transparent),
-    radial-gradient(2px 2px at 75% 15%, rgba(0, 240, 255, 0.6), transparent),
-    radial-gradient(1.5px 1.5px at 40% 70%, rgba(255, 200, 59, 0.7), transparent),
-    radial-gradient(2px 2px at 85% 60%, rgba(0, 240, 255, 0.5), transparent),
-    radial-gradient(1.2px 1.2px at 12% 85%, rgba(0, 240, 255, 0.6), transparent),
-    radial-gradient(2px 2px at 60% 88%, rgba(255, 200, 59, 0.5), transparent);
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(0, 240, 255, 0.85), transparent),
+    radial-gradient(2px 2px at 75% 15%, rgba(0, 240, 255, 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 40% 70%, rgba(255, 200, 59, 0.8), transparent),
+    radial-gradient(2.5px 2.5px at 85% 60%, rgba(0, 240, 255, 0.6), transparent),
+    radial-gradient(1.2px 1.2px at 12% 85%, rgba(0, 240, 255, 0.75), transparent),
+    radial-gradient(2px 2px at 60% 88%, rgba(255, 200, 59, 0.6), transparent);
   background-size: 100% 100%;
   pointer-events: none;
   z-index: 1;
-  animation: abyss-particles-drift 10s ease-in-out infinite alternate;
+  animation: abyss-particles-drift 12s ease-in-out infinite alternate;
 }
 
 @keyframes abyss-particles-drift {
-  0% { transform: translateY(0px) scale(1); opacity: 0.45; }
-  50% { transform: translateY(-16px) scale(1.06); opacity: 0.9; }
-  100% { transform: translateY(-32px) scale(1.02); opacity: 0.55; }
+  0% { transform: translateY(0px) scale(1); opacity: 0.55; }
+  50% { transform: translateY(-20px) scale(1.08); opacity: 0.95; }
+  100% { transform: translateY(-40px) scale(1.03); opacity: 0.65; }
 }
 
-/* 深淵大氣黑色漸層遮罩 (增強 UI 與棋盤對比) */
+/* 深淵大氣暗色漸層遮罩 (柔和聚焦中央棋盤與 UI) */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% 45%, rgba(6, 10, 16, 0.65) 0%, rgba(3, 5, 8, 0.92) 100%);
+  background: radial-gradient(circle at 50% 48%, rgba(4, 8, 14, 0.45) 0%, rgba(2, 4, 8, 0.88) 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -137,63 +138,63 @@ body::after {
 }
 
 .icon-button {
-  background: rgba(22, 33, 48, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(18, 28, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
   width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--text-main);
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: transform 0.15s ease, background 0.15s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .icon-button:active {
   transform: scale(0.92);
-  background: rgba(0, 240, 255, 0.2);
+  background: rgba(0, 240, 255, 0.25);
   border-color: var(--accent-cyan);
 }
 
 .menu-hero-section {
   text-align: center;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .game-badge {
   display: inline-block;
-  font-size: 0.72rem;
-  letter-spacing: 2.5px;
+  font-size: 0.74rem;
+  letter-spacing: 2.8px;
   color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.12);
-  border: 1px solid rgba(0, 240, 255, 0.35);
-  padding: 4px 14px;
+  background: rgba(0, 240, 255, 0.14);
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  padding: 5px 16px;
   border-radius: 20px;
   margin-bottom: 8px;
   font-weight: 800;
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
 }
 
 .game-title {
-  font-size: 2.45rem;
+  font-size: 2.55rem;
   font-weight: 900;
-  letter-spacing: 3px;
-  background: linear-gradient(180deg, #ffffff 15%, #b5d5f2 100%);
+  letter-spacing: 3.5px;
+  background: linear-gradient(180deg, #ffffff 10%, #c4e4ff 70%, #76b6ef 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 240, 255, 0.3);
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.9), 0 0 32px rgba(0, 240, 255, 0.4);
   margin-bottom: 6px;
 }
 
 .game-subtitle {
-  font-size: 0.96rem;
-  color: #a2b7cb;
-  letter-spacing: 1.2px;
+  font-size: 0.98rem;
+  color: #adc4d8;
+  letter-spacing: 1.4px;
 }
 
 /* 浮空玻璃舞台展示 */
@@ -201,39 +202,39 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
 .stage-pedestal-glass {
   position: relative;
-  width: 156px;
-  height: 156px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(14, 25, 40, 0.65) 100%);
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  border-radius: 28px;
+  width: 164px;
+  height: 164px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.18) 0%, rgba(12, 24, 40, 0.72) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 240, 255, 0.25), inset 0 2px 2px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 240, 255, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.45);
 }
 
 .pedestal-glow {
   position: absolute;
-  inset: -6px;
-  border-radius: 32px;
-  background: radial-gradient(circle, rgba(0, 240, 255, 0.3) 0%, transparent 70%);
-  animation: pedestal-pulse 2.5s ease-in-out infinite alternate;
+  inset: -8px;
+  border-radius: 36px;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.35) 0%, transparent 72%);
+  animation: pedestal-pulse 2.6s ease-in-out infinite alternate;
 }
 
 .pedestal-energy-ring {
   position: absolute;
-  bottom: 12px;
-  width: 110px;
-  height: 24px;
-  border: 1.5px solid rgba(0, 240, 255, 0.6);
+  bottom: 10px;
+  width: 120px;
+  height: 26px;
+  border: 1.8px solid rgba(0, 240, 255, 0.7);
   border-radius: 50%;
-  box-shadow: 0 0 14px rgba(0, 240, 255, 0.6);
-  animation: ring-rotate 6s linear infinite;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.75);
+  animation: ring-rotate 7s linear infinite;
 }
 
 @keyframes ring-rotate {
@@ -242,24 +243,24 @@ body::after {
 }
 
 @keyframes pedestal-pulse {
-  0% { opacity: 0.4; transform: scale(0.96); }
-  100% { opacity: 0.9; transform: scale(1.04); }
+  0% { opacity: 0.45; transform: scale(0.96); }
+  100% { opacity: 0.95; transform: scale(1.05); }
 }
 
 .menu-duck-hero-img {
   position: relative;
   z-index: 3;
-  width: 116px;
-  height: 116px;
+  width: 126px;
+  height: 126px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
-  animation: duck-hover-bob 2.8s ease-in-out infinite alternate;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.75));
+  animation: duck-hover-bob 2.6s ease-in-out infinite alternate;
 }
 
 @keyframes duck-hover-bob {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-7px); }
-  100% { transform: translateY(0px); }
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-8px) scale(1.02); }
+  100% { transform: translateY(0px) scale(1); }
 }
 
 .menu-record-card {
@@ -267,13 +268,13 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background: rgba(12, 18, 28, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 12px 18px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  background: rgba(10, 16, 26, 0.75);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  padding: 14px 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
 }
 
 .record-item {
@@ -283,23 +284,23 @@ body::after {
 }
 
 .record-label {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: var(--text-dim);
-  letter-spacing: 1.2px;
+  letter-spacing: 1.4px;
   margin-bottom: 2px;
 }
 
 .record-val {
-  font-size: 1.3rem;
+  font-size: 1.38rem;
   font-weight: 900;
   color: var(--accent-gold);
-  text-shadow: 0 0 10px rgba(255, 200, 59, 0.5);
+  text-shadow: 0 0 12px rgba(255, 200, 59, 0.6);
 }
 
 .record-divider {
   width: 1px;
-  height: 30px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 32px;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .menu-cta-container {
@@ -311,22 +312,22 @@ body::after {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(180deg, #ffc83b 0%, #e59700 100%);
+  background: linear-gradient(180deg, #ffca36 0%, #eb9700 100%);
   color: #170d00;
-  font-size: 1.28rem;
+  font-size: 1.32rem;
   font-weight: 900;
-  letter-spacing: 2.5px;
+  letter-spacing: 2.8px;
   border: none;
-  border-radius: 20px;
-  padding: 16px 24px;
+  border-radius: 22px;
+  padding: 17px 26px;
   cursor: pointer;
-  box-shadow: 0 10px 28px rgba(230, 155, 0, 0.45), inset 0 2px 2px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 32px rgba(235, 151, 0, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.6);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .btn-primary:active {
   transform: scale(0.96);
-  box-shadow: 0 4px 14px rgba(230, 155, 0, 0.35);
+  box-shadow: 0 4px 16px rgba(235, 151, 0, 0.4);
 }
 
 .btn-shine {
@@ -335,39 +336,40 @@ body::after {
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-  transform: skewX(-20deg);
-  animation: btn-shine-anim 3s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-22deg);
+  animation: btn-shine-anim 2.8s infinite;
 }
 
 @keyframes btn-shine-anim {
   0% { left: -100%; }
-  25% { left: 200%; }
+  28% { left: 200%; }
   100% { left: 200%; }
 }
 
 .btn-secondary {
-  background: rgba(22, 32, 46, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 30, 44, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--text-main);
-  font-size: 1rem;
+  font-size: 1.02rem;
   font-weight: 800;
-  border-radius: 16px;
-  padding: 12px 18px;
+  border-radius: 18px;
+  padding: 13px 20px;
   cursor: pointer;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  transition: background 0.12s ease, transform 0.12s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.12s ease, transform 0.12s ease, border-color 0.12s ease;
 }
 
 .btn-secondary:active {
-  background: rgba(0, 240, 255, 0.18);
+  background: rgba(0, 240, 255, 0.22);
+  border-color: var(--accent-cyan);
   transform: scale(0.96);
 }
 
 .menu-footer {
-  font-size: 0.78rem;
-  color: #65778a;
+  font-size: 0.8rem;
+  color: #6e8296;
   margin-top: 6px;
 }
 
@@ -389,32 +391,33 @@ body::after {
 }
 
 .tutorial-badge {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 800;
   color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.12);
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  padding: 4px 14px;
-  border-radius: 14px;
+  background: rgba(0, 240, 255, 0.14);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  padding: 5px 16px;
+  border-radius: 16px;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
 }
 
 .btn-text {
   background: none;
   border: none;
   color: var(--text-dim);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   padding: 6px 12px;
   cursor: pointer;
 }
 
 .tutorial-prompt {
-  font-size: 1.25rem;
+  font-size: 1.28rem;
   font-weight: 900;
   color: #fff;
   text-align: center;
   min-height: 38px;
   margin: 6px 0 12px 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
 }
 
 .tutorial-board-area {
@@ -436,13 +439,13 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(8, 12, 18, 0.88);
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
-  padding: 6px 12px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  background: rgba(8, 14, 22, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 8px 14px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.18);
   margin-top: 2px;
 }
 
@@ -453,11 +456,11 @@ body::after {
 }
 
 .hud-label {
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  color: #8395a6;
-  letter-spacing: 1.2px;
-  margin-bottom: 2px;
+  color: #8fa2b4;
+  letter-spacing: 1.4px;
+  margin-bottom: 3px;
 }
 
 /* 復古紅光七段數位儀表 */
@@ -465,10 +468,11 @@ body::after {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  background: #0f0204;
-  padding: 2px 4px;
-  border-radius: 4px;
-  border: 1px solid #28060a;
+  background: #0d0204;
+  padding: 3px 5px;
+  border-radius: 5px;
+  border: 1px solid #2d070c;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .seven-seg-digit {
@@ -481,7 +485,7 @@ body::after {
 
 .seg.on {
   fill: var(--led-red-on);
-  filter: drop-shadow(0 0 3px rgba(255, 37, 58, 0.95));
+  filter: drop-shadow(0 0 4px rgba(255, 37, 58, 0.95));
 }
 
 .status-banner-wrapper {
@@ -497,43 +501,45 @@ body::after {
 }
 
 .status-prompt {
-  font-size: 1.3rem;
+  font-size: 1.32rem;
   font-weight: 900;
-  letter-spacing: 1.2px;
-  padding: 6px 20px;
-  border-radius: 24px;
-  transition: all 0.2s ease;
+  letter-spacing: 1.4px;
+  padding: 7px 22px;
+  border-radius: 26px;
+  transition: all 0.22s ease;
 }
 
 .prompt-intro {
   color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .prompt-watch {
   color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.14);
-  border: 1px solid rgba(0, 240, 255, 0.4);
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 240, 255, 0.16);
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
 }
 
 .prompt-turn {
   color: var(--accent-gold);
-  background: rgba(255, 200, 59, 0.16);
-  border: 1px solid rgba(255, 200, 59, 0.45);
-  box-shadow: 0 0 16px rgba(255, 200, 59, 0.3);
+  background: rgba(255, 200, 59, 0.18);
+  border: 1px solid rgba(255, 200, 59, 0.5);
+  box-shadow: 0 0 20px rgba(255, 200, 59, 0.35);
   animation: turn-prompt-pulse 1.2s ease-in-out infinite alternate;
 }
 
 @keyframes turn-prompt-pulse {
-  0% { transform: scale(0.98); }
+  0% { transform: scale(0.97); }
   100% { transform: scale(1.03); }
 }
 
 .prompt-clear {
   color: #4df5a8;
-  background: rgba(77, 245, 168, 0.18);
-  border: 1px solid rgba(77, 245, 168, 0.4);
+  background: rgba(77, 245, 168, 0.2);
+  border: 1.5px solid rgba(77, 245, 168, 0.5);
+  box-shadow: 0 0 22px rgba(77, 245, 168, 0.45);
 }
 
 /* 關卡晉級橫幅 (3x3 / 4x4) */
@@ -545,11 +551,11 @@ body::after {
   white-space: nowrap;
   background: linear-gradient(90deg, #ffc83b, #ff821e);
   color: #150700;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 900;
-  padding: 8px 24px;
+  padding: 8px 26px;
   border-radius: 30px;
-  box-shadow: 0 8px 25px rgba(255, 150, 0, 0.65);
+  box-shadow: 0 8px 28px rgba(255, 150, 0, 0.7);
   opacity: 0;
   pointer-events: none;
   z-index: 30;
@@ -571,43 +577,43 @@ body::after {
   overflow: visible;
 }
 
-/* 起跳台待命基座 */
+/* 起跳台待命基座 (浮空反重力發光底座) */
 .start-platform-dock {
   position: relative;
-  width: min(72vw, 240px);
-  height: 46px;
+  width: min(74vw, 250px);
+  height: 48px;
   margin: 10px auto 4px auto;
-  background: linear-gradient(180deg, rgba(22, 36, 54, 0.8) 0%, rgba(10, 18, 30, 0.9) 100%);
-  border: 1.5px solid rgba(0, 240, 255, 0.5);
-  border-radius: 23px;
+  background: linear-gradient(180deg, rgba(20, 36, 56, 0.88) 0%, rgba(8, 16, 28, 0.95) 100%);
+  border: 1.8px solid rgba(0, 240, 255, 0.6);
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 0 18px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.85), inset 0 1.5px 2px rgba(255, 255, 255, 0.35), 0 0 22px rgba(0, 240, 255, 0.35);
   z-index: 8;
 }
 
 .dock-glow {
   position: absolute;
   inset: 0;
-  border-radius: 23px;
-  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.35) 0%, transparent 75%);
-  animation: dock-pulse 2s ease-in-out infinite alternate;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.4) 0%, transparent 76%);
+  animation: dock-pulse 2.2s ease-in-out infinite alternate;
 }
 
 @keyframes dock-pulse {
   0% { opacity: 0.35; transform: scale(0.98); }
-  100% { opacity: 0.9; transform: scale(1.02); }
+  100% { opacity: 0.95; transform: scale(1.02); }
 }
 
 .dock-label {
   position: relative;
   z-index: 2;
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   font-weight: 900;
-  letter-spacing: 2.2px;
+  letter-spacing: 2.4px;
   color: var(--accent-cyan);
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.75);
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.85);
 }
 
 /* =========================================================
@@ -619,10 +625,10 @@ body::after {
   height: 100%;
   display: grid;
   padding: 10px;
-  background: rgba(6, 12, 20, 0.55);
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  border-radius: 26px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+  background: rgba(6, 12, 22, 0.62);
+  border: 1.8px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), inset 0 1.5px 2px rgba(255, 255, 255, 0.2);
   transition: transform 0.12s ease;
 }
 
@@ -632,9 +638,9 @@ body::after {
 
 @keyframes cam-shake {
   0% { transform: translate(0, 0); }
-  25% { transform: translate(-7px, 5px); }
-  50% { transform: translate(6px, -4px); }
-  75% { transform: translate(-4px, 3px); }
+  25% { transform: translate(-8px, 6px); }
+  50% { transform: translate(7px, -5px); }
+  75% { transform: translate(-5px, 4px); }
   100% { transform: translate(0, 0); }
 }
 
@@ -672,9 +678,9 @@ body::after {
 .glass-pane {
   position: absolute;
   inset: 0;
-  border-radius: 18px;
+  border-radius: 20px;
   background: var(--glass-surface);
-  border: 1.5px solid var(--glass-border);
+  border: 1.8px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   display: flex;
   align-items: center;
@@ -684,7 +690,7 @@ body::after {
 }
 
 .grid-size-4 .glass-pane {
-  border-radius: 12px;
+  border-radius: 14px;
 }
 
 /* 玻璃頂部光澤斜角 */
@@ -694,24 +700,24 @@ body::after {
   top: 0;
   left: 0;
   width: 100%;
-  height: 42%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 100%);
-  border-radius: 16px 16px 0 0;
+  height: 44%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 18px 18px 0 0;
   pointer-events: none;
 }
 
-/* 題目亮燈光效層 (高能水晶青光發光核心) */
+/* 題目亮燈光效層 (高能極光青光發光核心) */
 .glass-glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(0, 240, 255, 0.88) 0%, rgba(0, 240, 255, 0.4) 55%, rgba(0, 150, 200, 0.1) 100%);
+  background: radial-gradient(circle at center, rgba(0, 245, 255, 0.95) 0%, rgba(0, 240, 255, 0.45) 55%, rgba(0, 150, 210, 0.1) 100%);
   opacity: 0;
   pointer-events: none;
 }
 
 .glass-tile.is-lit .glass-pane {
   border-color: var(--glass-border-lit);
-  box-shadow: 0 0 32px rgba(0, 240, 255, 0.9), inset 0 0 20px rgba(0, 240, 255, 0.7);
+  box-shadow: 0 0 36px rgba(0, 245, 255, 0.95), inset 0 0 24px rgba(0, 245, 255, 0.75);
 }
 
 .glass-tile.glow-active .glass-glow {
@@ -722,33 +728,61 @@ body::after {
 .glass-step-number {
   position: relative;
   z-index: 4;
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: 900;
   color: #ffffff;
-  text-shadow: 0 0 18px rgba(0, 240, 255, 1), 0 3px 8px rgba(0, 0, 0, 0.95);
+  text-shadow: 0 0 20px rgba(0, 245, 255, 1), 0 0 38px rgba(0, 245, 255, 0.7), 0 3px 8px rgba(0, 0, 0, 0.95);
   opacity: 0;
   pointer-events: none;
 }
 
 .grid-size-3 .glass-step-number {
-  font-size: 2.3rem;
+  font-size: 2.4rem;
 }
 
 .grid-size-4 .glass-step-number {
-  font-size: 1.8rem;
+  font-size: 1.85rem;
+}
+
+/* 著地衝擊漣漪光環 (Juicy Land Feedback) */
+.glass-land-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-cyan);
+  box-shadow: 0 0 14px var(--accent-cyan);
+  pointer-events: none;
+  z-index: 8;
+  animation: land-ripple-anim 0.38s ease-out forwards;
+}
+
+@keyframes land-ripple-anim {
+  0% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(14);
+    opacity: 0;
+  }
 }
 
 /* 點擊反饋 */
 .tap-flash-success .glass-pane {
-  background: rgba(0, 240, 255, 0.6);
+  background: rgba(0, 240, 255, 0.65);
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 28px rgba(0, 240, 255, 0.95);
+  box-shadow: 0 0 32px rgba(0, 240, 255, 1);
 }
 
 .tap-flash-fail .glass-pane {
-  background: rgba(255, 37, 58, 0.65);
+  background: rgba(255, 37, 58, 0.7);
   border-color: var(--led-red-on);
-  box-shadow: 0 0 28px rgba(255, 37, 58, 0.95);
+  box-shadow: 0 0 32px rgba(255, 37, 58, 1);
 }
 
 /* 玻璃裂紋層 */
@@ -769,7 +803,7 @@ body::after {
 }
 
 .cracking-stage-2 .crack-line {
-  filter: drop-shadow(0 0 4px #ffffff);
+  filter: drop-shadow(0 0 5px #ffffff);
 }
 
 @keyframes crack-spread {
@@ -783,19 +817,19 @@ body::after {
 
 .glass-shard {
   position: absolute;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(180, 220, 255, 0.6) 100%);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(175, 225, 255, 0.7) 100%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.85);
+  border: 1.2px solid rgba(255, 255, 255, 0.95);
 }
 
 /* =========================================================
    鴨鴨角色 (DuckController)
    ========================================================= */
 .duck-avatar-wrapper {
-  width: 76px;
-  height: 76px;
-  margin-left: -38px;
-  margin-top: -50px;
+  width: 84px;
+  height: 84px;
+  margin-left: -42px;
+  margin-top: -56px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -804,9 +838,9 @@ body::after {
 .duck-shadow {
   position: absolute;
   bottom: 2px;
-  width: 54px;
-  height: 13px;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, transparent 75%);
+  width: 58px;
+  height: 14px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, transparent 75%);
   border-radius: 50%;
   opacity: 0.45;
   transition: transform 0.08s ease, opacity 0.08s ease;
@@ -828,27 +862,37 @@ body::after {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.7));
   pointer-events: none;
 }
 
 .duck-idle-anim {
-  animation: duck-subtle-float 2.4s ease-in-out infinite alternate;
+  animation: duck-subtle-float 2.5s ease-in-out infinite alternate;
 }
 
 @keyframes duck-subtle-float {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-3px) rotate(1.2deg); }
-  100% { transform: translateY(0px) rotate(-0.8deg); }
+  50% { transform: translateY(-4px) rotate(1.2deg); }
+  100% { transform: translateY(0px) rotate(-1deg); }
 }
 
 .duck-jump-pose {
   transform: translateY(-2px);
-  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.75));
 }
 
 .duck-shock-pose {
-  filter: drop-shadow(0 4px 16px rgba(255, 60, 60, 0.6));
+  filter: drop-shadow(0 4px 18px rgba(255, 60, 60, 0.75));
+  animation: shock-shiver 0.08s ease-in-out infinite alternate;
+}
+
+@keyframes shock-shiver {
+  0% { transform: translate(-2px, 0); }
+  100% { transform: translate(2px, 0); }
+}
+
+.duck-celebrate-pose {
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.85)), drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75));
 }
 
 /* =========================================================
@@ -857,9 +901,9 @@ body::after {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(3, 5, 8, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(2, 4, 8, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -869,24 +913,24 @@ body::after {
 
 .modal-card {
   width: 100%;
-  max-width: 360px;
-  background: rgba(16, 24, 36, 0.95);
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  border-radius: 26px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-  padding: 28px 24px;
+  max-width: 370px;
+  background: rgba(14, 22, 34, 0.96);
+  border: 1.8px solid rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.92);
+  padding: 30px 26px;
   text-align: center;
 }
 
 .modal-title {
-  font-size: 1.65rem;
+  font-size: 1.72rem;
   font-weight: 900;
   color: #fff;
   margin-bottom: 6px;
 }
 
 .modal-desc {
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   color: var(--text-dim);
   margin-bottom: 24px;
 }
@@ -898,85 +942,86 @@ body::after {
 }
 
 .game-over-header {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .skull-icon {
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   margin-bottom: 4px;
 }
 
 .game-over-title {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 900;
   color: var(--led-red-on);
-  letter-spacing: 2px;
+  letter-spacing: 2.2px;
   text-shadow: var(--led-red-glow);
 }
 
 .game-over-subtitle {
-  font-size: 0.92rem;
-  color: #a4b4c4;
+  font-size: 0.95rem;
+  color: #a8bccc;
   margin-top: 4px;
 }
 
 .final-score-panel {
-  background: rgba(8, 12, 18, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
-  padding: 14px 18px;
-  margin-bottom: 18px;
+  background: rgba(6, 10, 16, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
 }
 
 .final-score-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 0;
+  padding: 5px 0;
 }
 
 .final-score-row .label {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--text-dim);
 }
 
 .final-score-row .val {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 900;
   color: #fff;
 }
 
 .final-score-row .val.highlight {
   color: var(--accent-gold);
-  font-size: 1.35rem;
+  font-size: 1.42rem;
 }
 
 .final-score-divider {
   width: 100%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.09);
+  margin: 10px 0;
 }
 
 .new-record-badge {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 900;
   color: #ffd700;
-  background: rgba(255, 215, 0, 0.15);
-  border: 1px solid rgba(255, 215, 0, 0.45);
-  padding: 6px 16px;
-  border-radius: 20px;
-  margin-bottom: 16px;
+  background: rgba(255, 215, 0, 0.16);
+  border: 1.5px solid rgba(255, 215, 0, 0.55);
+  padding: 7px 18px;
+  border-radius: 22px;
+  margin-bottom: 18px;
   display: inline-block;
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.35);
 }
 
 .secondary-btn-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
 .restart-btn {
-  font-size: 1.35rem;
-  padding: 16px 20px;
+  font-size: 1.38rem;
+  padding: 17px 22px;
 }

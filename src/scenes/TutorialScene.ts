@@ -124,20 +124,22 @@ export class TutorialScene {
       this.playerStep++;
 
       this.duck.jumpTo(targetPos.x, targetPos.y, () => {
+        tile?.spawnLandRipple();
         if (isLastStep) {
           // 完成教學
           this.board.setInteractive(false);
           this.promptTextEl.textContent = '🎉 太棒了！準備開始第 1 關';
           AudioManager.playLevelClear();
-          setTimeout(() => {
+          this.duck.celebrateClear(() => {
             this.finish();
-          }, 650);
+          });
         }
       });
     } else {
       // 點錯，親切提示重新觀看
       tile?.tapFlash(false);
       this.duck.jumpTo(targetPos.x, targetPos.y, () => {
+        tile?.spawnLandRipple();
         this.promptTextEl.textContent = '💡 沒關係，再看一次！';
         setTimeout(() => {
           this.runSequencePresentation();
