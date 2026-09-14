@@ -1,0 +1,909 @@
+/* =========================================================
+   鴨鴨踩玻璃橋 (Duck Stepping Glass Bridge) - 核心樣式表
+   深色深淵空間 × 晶瑩強化玻璃 × 復古紅光七段顯示器 × Q萌小黃鴨
+   ========================================================= */
+
+:root {
+  --bg-deep-abyss: #070a0e;
+  --bg-abyss-gradient: radial-gradient(circle at 50% 35%, #101622 0%, #080c13 55%, #030508 100%);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-surface: rgba(25, 38, 54, 0.45);
+  --glass-highlight: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 10px 25px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  --accent-cyan: #00f0ff;
+  --accent-cyan-glow: 0 0 20px rgba(0, 240, 255, 0.75), 0 0 45px rgba(0, 240, 255, 0.4);
+  --accent-gold: #ffc83b;
+  --accent-gold-glow: 0 0 20px rgba(255, 200, 59, 0.75);
+  --led-red-on: #ff2a3b;
+  --led-red-glow: 0 0 8px rgba(255, 42, 59, 0.8), 0 0 16px rgba(255, 42, 59, 0.35);
+  --led-red-off: rgba(60, 8, 14, 0.55);
+  --text-main: #f0f4f8;
+  --text-dim: #7e8d9d;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans TC", sans-serif;
+}
+
+/* 全域重設與手機防護 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-deep-abyss);
+  background-image: var(--bg-abyss-gradient);
+  font-family: var(--font-family);
+  color: var(--text-main);
+  touch-action: none;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* 深淵微弱冷霧背景層 */
+.abyss-fog-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 60%, rgba(20, 35, 55, 0.22) 0%, rgba(0, 0, 0, 0) 70%);
+  z-index: 1;
+}
+
+/* 場景通用容器 */
+.scene-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5;
+  padding: 16px 20px;
+}
+
+/* =========================================================
+   首頁 MenuScene
+   ========================================================= */
+.menu-scene {
+  background: transparent;
+}
+
+.menu-content-wrapper {
+  width: 100%;
+  max-width: 440px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.icon-button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--text-main);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.icon-button:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.menu-hero-section {
+  text-align: center;
+  margin-top: 6px;
+}
+
+.game-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.game-title {
+  font-size: 2.35rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, #ffffff 20%, #c4d7e8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  margin-bottom: 6px;
+}
+
+.game-subtitle {
+  font-size: 0.95rem;
+  color: #a4b3c4;
+  letter-spacing: 1px;
+}
+
+.menu-duck-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 18px 0;
+}
+
+.stage-pedestal-glass {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  background: var(--glass-surface);
+  border: 2px solid var(--glass-border);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--glass-shadow);
+}
+
+.pedestal-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.25) 0%, rgba(0, 240, 255, 0) 70%);
+  animation: pedestal-pulse 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes pedestal-pulse {
+  0% { opacity: 0.4; transform: scale(0.95); }
+  100% { opacity: 0.85; transform: scale(1.05); }
+}
+
+.menu-duck-figure {
+  z-index: 2;
+  animation: duck-gentle-bob 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes duck-gentle-bob {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(-1.5deg); }
+  100% { transform: translateY(0) rotate(1.5deg); }
+}
+
+.menu-record-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(14, 21, 31, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 16px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.record-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.record-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.record-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+}
+
+.record-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-cta-container {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.btn-primary {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #ffc83b 0%, #e09b00 100%);
+  color: #1a1000;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 18px;
+  padding: 16px 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(230, 160, 0, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.4);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+  box-shadow: 0 3px 12px rgba(230, 160, 0, 0.3);
+}
+
+.btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  animation: btn-shine-anim 3s infinite;
+}
+
+@keyframes btn-shine-anim {
+  0% { left: -100%; }
+  25% { left: 200%; }
+  100% { left: 200%; }
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text-main);
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 14px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+
+.btn-secondary:active {
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(0.96);
+}
+
+.menu-footer {
+  font-size: 0.78rem;
+  color: #5a6978;
+  margin-top: 8px;
+}
+
+/* =========================================================
+   新手教學 TutorialScene
+   ========================================================= */
+.tutorial-scene {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.tutorial-header {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.tutorial-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.12);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.tutorial-prompt {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  min-height: 38px;
+  margin: 10px 0 16px 0;
+}
+
+.tutorial-board-area {
+  position: relative;
+  width: min(88vw, 380px);
+  aspect-ratio: 1;
+}
+
+/* =========================================================
+   遊戲主場景 GameScene & HUD
+   ========================================================= */
+.game-scene {
+  justify-content: space-between;
+}
+
+.game-hud {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 14, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 6px 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  margin-top: 4px;
+}
+
+.hud-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hud-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #7b8b9a;
+  letter-spacing: 1.2px;
+  margin-bottom: 2px;
+}
+
+/* 起跳台待命基座 (深色微光防滑強化玻璃) */
+.start-platform-dock {
+  position: relative;
+  width: min(72vw, 240px);
+  height: 42px;
+  margin: 12px auto 6px auto;
+  background: rgba(18, 28, 42, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.dock-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.2) 0%, transparent 70%);
+  animation: dock-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes dock-pulse {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+.dock-label {
+  position: relative;
+  z-index: 2;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #6d8299;
+}
+
+/* 老式電子七段顯示器樣式 */
+.seven-seg-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #120305;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid #2a080d;
+}
+
+.seven-seg-digit {
+  display: block;
+}
+
+.seg.off {
+  fill: var(--led-red-off);
+}
+
+.seg.on {
+  fill: var(--led-red-on);
+  filter: drop-shadow(0 0 3px rgba(255, 42, 59, 0.85));
+}
+
+.status-banner-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  margin: 6px 0 10px 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-prompt {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 6px 18px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.prompt-intro {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.prompt-watch {
+  color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+}
+
+.prompt-turn {
+  color: var(--accent-gold);
+  background: rgba(255, 200, 59, 0.15);
+  border: 1px solid rgba(255, 200, 59, 0.35);
+  animation: turn-prompt-pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes turn-prompt-pulse {
+  0% { transform: scale(0.98); }
+  100% { transform: scale(1.03); }
+}
+
+.prompt-clear {
+  color: #4df5a8;
+  background: rgba(77, 245, 168, 0.15);
+}
+
+/* 關卡晉級橫幅 (3x3 / 4x4) */
+.board-upgrade-banner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  white-space: nowrap;
+  background: linear-gradient(90deg, #ffc83b, #ff821e);
+  color: #1a0800;
+  font-size: 0.95rem;
+  font-weight: 900;
+  padding: 8px 24px;
+  border-radius: 30px;
+  box-shadow: 0 8px 25px rgba(255, 150, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 30;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.board-upgrade-banner.banner-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* 遊戲主舞台 */
+.game-board-container {
+  position: relative;
+  width: min(88vw, 420px);
+  aspect-ratio: 1;
+  margin: auto 0;
+}
+
+/* =========================================================
+   玻璃棋盤與瓷磚 (Board & GlassTile)
+   ========================================================= */
+.glass-board {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(8, 14, 22, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  transition: transform 0.12s ease;
+}
+
+/* 鏡頭震動 (Camera Shake) */
+.camera-shake-active {
+  animation: cam-shake 0.16s ease-in-out;
+}
+
+@keyframes cam-shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-6px, 4px); }
+  50% { transform: translate(5px, -3px); }
+  75% { transform: translate(-3px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+
+.grid-size-2 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.grid-size-3 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.grid-size-4 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 8px;
+}
+
+/* 單塊玻璃格 */
+.glass-tile {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  touch-action: none;
+}
+
+.glass-pane {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: var(--glass-surface);
+  border: 1.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+}
+
+.grid-size-4 .glass-pane {
+  border-radius: 12px;
+}
+
+/* 頂部高光斜角 */
+.glass-pane::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 38%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
+}
+
+/* 題目亮燈光效層 */
+.glass-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.8) 0%, rgba(0, 240, 255, 0.25) 60%, rgba(0, 240, 255, 0) 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.glass-tile.is-lit .glass-pane {
+  border-color: rgba(0, 240, 255, 0.85);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.6), inset 0 0 16px rgba(0, 240, 255, 0.5);
+}
+
+.glass-tile.glow-active .glass-glow {
+  opacity: 1;
+}
+
+/* 序列步驟數字 */
+.glass-step-number {
+  position: relative;
+  z-index: 3;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 14px rgba(0, 240, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  font-family: var(--font-family);
+}
+
+.grid-size-3 .glass-step-number {
+  font-size: 2.1rem;
+}
+
+.grid-size-4 .glass-step-number {
+  font-size: 1.65rem;
+}
+
+/* 玩家點擊反饋 */
+.tap-flash-success .glass-pane {
+  background: rgba(0, 240, 255, 0.5);
+  border-color: var(--accent-cyan);
+}
+
+.tap-flash-fail .glass-pane {
+  background: rgba(255, 42, 59, 0.55);
+  border-color: var(--led-red-on);
+}
+
+/* 玻璃裂紋層 */
+.glass-cracks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.crack-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cracking-stage-1 .crack-primary {
+  animation: crack-spread 0.1s ease-out forwards;
+}
+
+.cracking-stage-2 .crack-line {
+  filter: drop-shadow(0 0 4px #ffffff);
+}
+
+@keyframes crack-spread {
+  from { stroke-dasharray: 80; stroke-dashoffset: 80; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* 整塊粉碎狀態：玻璃消失，露出深淵黑洞 */
+.glass-tile.is-shattered .glass-pane {
+  visibility: hidden;
+}
+
+/* 預製多邊形破片 */
+.glass-shard {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(180, 220, 255, 0.5) 100%);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* =========================================================
+   鴨鴨角色 (DuckController)
+   ========================================================= */
+.duck-avatar-wrapper {
+  width: 76px;
+  height: 76px;
+  margin-left: -38px;
+  margin-top: -46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.duck-shadow {
+  position: absolute;
+  bottom: 2px;
+  width: 52px;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 75%);
+  border-radius: 50%;
+  opacity: 0.4;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.duck-body-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 90%;
+  transition: transform 0.08s ease-out;
+}
+
+.duck-vector {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+/* 呼吸動畫 */
+.duck-idle {
+  animation: duck-breath 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes duck-breath {
+  0% { transform: scale(1, 1); }
+  100% { transform: scale(1.02, 0.98); }
+}
+
+/* =========================================================
+   彈出式視窗 (Modals)
+   ========================================================= */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 6, 10, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 360px;
+  background: rgba(18, 26, 38, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.modal-desc {
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-over-header {
+  margin-bottom: 18px;
+}
+
+.skull-icon {
+  font-size: 2.4rem;
+  margin-bottom: 4px;
+}
+
+.game-over-title {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: var(--led-red-on);
+  letter-spacing: 2px;
+  text-shadow: var(--led-red-glow);
+}
+
+.game-over-subtitle {
+  font-size: 0.92rem;
+  color: #a0b0c0;
+  margin-top: 4px;
+}
+
+.final-score-panel {
+  background: rgba(10, 14, 22, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+
+.final-score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.final-score-row .label {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.final-score-row .val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.final-score-row .val.highlight {
+  color: var(--accent-gold);
+  font-size: 1.35rem;
+}
+
+.final-score-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 8px 0;
+}
+
+.new-record-badge {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+.secondary-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.restart-btn {
+  font-size: 1.35rem;
+  padding: 16px 20px;
+}
